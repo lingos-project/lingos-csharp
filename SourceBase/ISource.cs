@@ -1,5 +1,4 @@
 #nullable enable
-using System.Collections;
 using System.Collections.Generic;
 using Common;
 
@@ -7,6 +6,10 @@ namespace SourceBase
 {
     public interface ISource
     {
+        // general
+        Response Initialize();
+        Response Migrate();
+    
         // locale
         Response AddLocale(string name, bool required);
         Response UpdateLocale(string oldName, string newName);
