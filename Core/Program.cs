@@ -7,9 +7,9 @@ using SourceBase;
 
 namespace Core
 {
-    class Program
+    internal class Program
     {
-        static void Main(string[] args)
+        private static void Main(string[] args)
         {
             try
             {
@@ -19,9 +19,9 @@ namespace Core
                     Console.ReadLine();
                 }
 
-                string[] sourcePaths = new string[]
+                string[] sourcePaths =
                 {
-                    // paths to sources to load.
+                    @"SourcePostgres/bin/Debug/net5.0/SourcePostgres.dll"
                 };
 
                 IEnumerable<ISource> sources = sourcePaths.SelectMany(sourcePath =>
@@ -34,19 +34,16 @@ namespace Core
                 {
                     Console.WriteLine("Commands: ");
 
-                    foreach (ISource source in sources)
-                    {
-                        Console.WriteLine(source.GetTranslation("something", "more", "en", null).Text);
-                    }
+                    foreach (ISource source in sources) source.AddLocale("en", true);
                 }
                 else
                 {
                     foreach (string commandName in args)
                     {
                         Console.WriteLine($"-- {commandName} --");
-                        
+
                         // execute the command with the name passed as an argument.
-                        
+
                         Console.WriteLine();
                     }
                 }
@@ -57,7 +54,7 @@ namespace Core
             }
         }
 
-        static Assembly LoadSource(string relativePath)
+        private static Assembly LoadSource(string relativePath)
         {
             string root = Path.GetFullPath(
                 Path.Combine(
@@ -65,36 +62,32 @@ namespace Core
                         Path.GetDirectoryName(
                             Path.GetDirectoryName(
                                 Path.GetDirectoryName(
-                                    Path.GetDirectoryName(typeof(Program).Assembly.Location)))))!));
+                                    Path.GetDirectoryName(typeof(Program).Assembly.Location))))) ?? string.Empty));
 
             string sourceLocation =
                 Path.GetFullPath(Path.Combine(root, relativePath.Replace('\\', Path.DirectorySeparatorChar)));
             Console.WriteLine($"Loading commands from: {sourceLocation}");
-            SourceLoadContext loadContext = new SourceLoadContext(sourceLocation);
+            SourceLoadContext loadContext = new(sourceLocation);
             return loadContext.LoadFromAssemblyName(new AssemblyName(Path.GetFileNameWithoutExtension(sourceLocation)));
         }
 
-        static IEnumerable<ISource> CreateSources(Assembly assembly)
+        private static IEnumerable<ISource> CreateSources(Assembly assembly)
         {
             int count = 0;
 
             foreach (Type type in assembly.GetTypes())
-            {
                 if (typeof(ISource).IsAssignableFrom(type))
-                {
                     if (Activator.CreateInstance(type) is ISource result)
                     {
                         count++;
                         yield return result;
                     }
-                }
-            }
 
             if (count == 0)
             {
                 string availableTypes = string.Join(",", assembly.GetTypes().Select(t => t.FullName));
                 throw new ApplicationException(
-                    $"Can't find any type which implements ICommand in {assembly} from {assembly.Location}.\n" +
+                    $"Can't find any type which implements ISource in {assembly} from {assembly.Location}.\n" +
                     $"Available types: {availableTypes}");
             }
         }
