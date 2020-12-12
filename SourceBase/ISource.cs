@@ -22,14 +22,10 @@ namespace SourceBase
         Response DeprecateScope(string name);
         IEnumerable<Scope> GetScopes();
 
-        // key
-        Response AddKey(string name, string scope);
-        Response UpdateKeyName(string scope, string oldName, string newName);
-        Response UpdateKeyScope(string name, string oldScope, string newScope);
-        Response DeleteKey(string name, string scope);
-
         // translation
-        Response UpsertTranslation(string key, string scope, string locale, string text, string? variant);
+        Response CreateTranslation(string key, string scope, string locale, string text, string? variant);
+        
+        Response UpdateTranslation(string key, string scope, string locale, string text, string? variant);
         Response DeleteTranslation(string key, string scope, string locale, string? variant);
         Translation GetTranslation(string key, string scope, string locale, string? variant);
         IEnumerable<Translation> GetTranslations();

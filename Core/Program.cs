@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using Common;
 using SourceBase;
 
 namespace Core
@@ -34,7 +35,7 @@ namespace Core
                 {
                     Console.WriteLine("Commands: ");
 
-                    foreach (ISource source in sources) source.AddLocale("en", true);
+                    foreach (ISource source in sources) source.UpdateLocale("fr", "es");
                 }
                 else
                 {

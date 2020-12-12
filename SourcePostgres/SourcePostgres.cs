@@ -1,6 +1,7 @@
 #nullable enable
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Common;
 using Microsoft.EntityFrameworkCore;
 using SourceBase;
@@ -23,14 +24,14 @@ namespace SourcePostgres
         {
             try
             {
-                using Database db = new();
-                db.Locales.Add(new Locale
+                using DatabaseContext ctx = new();
+                ctx.Locales.Add(new Locale
                 {
                     Name = name,
                     Required = required
                 });
 
-                db.SaveChanges();
+                ctx.SaveChanges();
             }
             catch (Exception e)
             {
@@ -50,39 +51,89 @@ namespace SourcePostgres
 
         public Response UpdateLocale(string oldName, string newName)
         {
-            const string query = @"
-                UPDATE Locales
-                SET Name = @NewName
-                WHERE Name = @OldName
-            ";
-
-            using Database db = new();
-            db.Database.ExecuteSqlRaw(query, new
+            try
             {
-                OldName = oldName,
-                NewName = newName
-            });
+                using DatabaseContext ctx = new();
+                ctx.Database
+                    .ExecuteSqlInterpolated($"UPDATE locales SET name={newName} WHERE name={oldName}");
+            }
+            catch (Exception e)
+            {
+                return new Response
+                {
+                    Message = e.Message,
+                    Type = ResponseType.Error,
+                };
+            }
 
             return new Response
             {
-                Message = "",
-                Type = ResponseType.Info,
+                Message = $"Changed the locale {oldName} to be {newName}",
+                Type = ResponseType.Success,
             };
         }
 
         public Response DeprecateLocale(string name)
         {
-            throw new NotImplementedException();
+            try
+            {
+                using DatabaseContext ctx = new();
+                ctx.Locales.Update(new Locale
+                {
+                    Name = name,
+                    Deprecated = true,
+                });
+
+                ctx.SaveChanges();
+            }
+            catch (Exception e)
+            {
+                return new Response
+                {
+                    Message = e.Message,
+                    Type = ResponseType.Error
+                };
+            }
+
+            return new Response
+            {
+                Message = $"Successfully deprecated {name} locale!",
+                Type = ResponseType.Error,
+            };
         }
 
         public IEnumerable<Locale> GetLocales()
         {
-            throw new NotImplementedException();
+            using DatabaseContext ctx = new();
+            return ctx.Locales.ToList();
         }
 
         public Response AddScope(string name)
         {
-            throw new NotImplementedException();
+            try
+            {
+                using DatabaseContext ctx = new();
+                ctx.Scopes.Add(new Scope
+                {
+                    Name = name,
+                });
+                
+                ctx.SaveChanges();
+            }
+            catch (Exception e)
+            {
+                return new Response
+                {
+                    Message = e.Message,
+                    Type = ResponseType.Error,
+                };
+            }
+            
+            return new Response
+            {
+                Message = $"Successfully added {name} scope!",
+                Type = ResponseType.Success,
+            };
         }
 
         public Response UpdateScope(string oldName, string newName)
@@ -92,52 +143,123 @@ namespace SourcePostgres
 
         public Response DeprecateScope(string name)
         {
-            throw new NotImplementedException();
+            try
+            {
+                using DatabaseContext ctx = new();
+                ctx.Scopes.Update(new Scope
+                {
+                    Name = name,
+                    Deprecated = true,
+                });
+                
+                ctx.SaveChanges();
+            }
+            catch (Exception e)
+            {
+                return new Response
+                {
+                    Message = e.Message,
+                    Type = ResponseType.Error,
+                };
+            }
+            
+            return new Response
+            {
+                Message = $"Successfully deprecated {name} scope",
+                Type = ResponseType.Success,
+            };
         }
 
         public IEnumerable<Scope> GetScopes()
         {
-            throw new NotImplementedException();
+            using DatabaseContext ctx = new();
+            return ctx.Scopes.ToList();
         }
 
-        public Response AddKey(string name, string scope)
+        public Response CreateTranslation(string key, string scope, string locale, string text, string? variant)
         {
-            throw new NotImplementedException();
-        }
+            try
+            {
+                using DatabaseContext ctx = new();
+                ctx.Translations.Add(new Translation
+                {
+                    Key = key,
+                    ScopeName = scope,
+                    LocaleName = locale,
+                    Text = text,
+                    Variant = variant,
+                });
 
-        public Response UpdateKeyName(string scope, string oldName, string newName)
-        {
-            throw new NotImplementedException();
-        }
+                ctx.SaveChanges();
+            }
+            catch (Exception ex)
+            {
+                return new Response
+                {
+                    Message = ex.Message,
+                    Type = ResponseType.Error,
+                };
+            }
 
-        public Response UpdateKeyScope(string name, string oldScope, string newScope)
-        {
-            throw new NotImplementedException();
+            return new Response
+            {
+                Message = $"Successfully added a new translation for {scope}.{key}[{variant}] ({locale})!",
+                Type = ResponseType.Success,
+            };
         }
-
-        public Response DeleteKey(string name, string scope)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Response UpsertTranslation(string key, string scope, string locale, string text, string? variant)
+        
+        public Response UpdateTranslation(string key, string scope, string locale, string text, string? variant)
         {
             throw new NotImplementedException();
         }
 
         public Response DeleteTranslation(string key, string scope, string locale, string? variant)
         {
-            throw new NotImplementedException();
+            try
+            {
+                using DatabaseContext ctx = new();
+                ctx.Translations.Remove(new Translation
+                {
+                    Key = key,
+                    ScopeName = scope,
+                    LocaleName = locale,
+                    Variant = variant,
+                });
+                
+                ctx.SaveChanges();
+            }
+            catch (Exception ex)
+            {
+                return new Response
+                {
+                    Message = ex.Message,
+                    Type = ResponseType.Error,
+                };
+            }
+
+            return new Response
+            {
+                Message = $"Successfully deleted the {scope}.{key}[{variant}] ({locale}) translation!",
+                Type = ResponseType.Success,
+            };
         }
 
         public Translation GetTranslation(string key, string scope, string locale, string? variant)
         {
-            throw new NotImplementedException();
+            using DatabaseContext ctx = new();
+            return ctx.Translations.Find(new Translation
+            {
+                Key = key,
+                ScopeName = scope,
+                LocaleName = locale,
+                Variant = variant,
+            });
         }
 
         public IEnumerable<Translation> GetTranslations()
         {
-            throw new NotImplementedException();
+            using DatabaseContext ctx = new();
+            return ctx.Translations.ToList();
         }
     }
 }
