@@ -9,7 +9,7 @@ using SourcePostgres;
 namespace SourcePostgres.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    [Migration("20201212182858_CreateSourcePostgresDB")]
+    [Migration("20201212201603_CreateSourcePostgresDB")]
     partial class CreateSourcePostgresDB
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

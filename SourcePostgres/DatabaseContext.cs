@@ -21,11 +21,11 @@ namespace SourcePostgres
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Translation>()
-                .HasKey(t => new {t.Key, t.LocaleName, t.ScopeName, t.Variant});
-            modelBuilder.Entity<Translation>()
-                .Property(t => t.Variant)
-                .HasDefaultValue("none");
+            modelBuilder.Entity<Translation>(entity =>
+            {
+                entity.HasKey(t => new {t.Key, t.LocaleName, t.ScopeName, t.Variant});
+                entity.Property(t => t.Variant).HasDefaultValue("none");
+            });
         }
     }
 }

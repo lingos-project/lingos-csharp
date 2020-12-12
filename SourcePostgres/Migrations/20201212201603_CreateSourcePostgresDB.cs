@@ -49,12 +49,14 @@ namespace SourcePostgres.Migrations
                         column: x => x.locale_name,
                         principalTable: "locales",
                         principalColumn: "name",
+                        onUpdate: ReferentialAction.Cascade,
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "fk_translations_scopes_scope_name",
                         column: x => x.scope_name,
                         principalTable: "scopes",
                         principalColumn: "name",
+                        onUpdate: ReferentialAction.Cascade,
                         onDelete: ReferentialAction.Cascade);
                 });
 
