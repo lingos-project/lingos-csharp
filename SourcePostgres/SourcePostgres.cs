@@ -12,12 +12,30 @@ namespace SourcePostgres
     {
         public Response Initialize()
         {
-            throw new NotImplementedException();
+            return Migrate();
         }
 
         public Response Migrate()
         {
-            throw new NotImplementedException();
+            try
+            {
+                using DatabaseContext ctx = new();
+                ctx.Database.Migrate();
+            }
+            catch (Exception e)
+            {
+                return new Response
+                {
+                    Message = e.Message,
+                    Type = ResponseType.Error,
+                };
+            }
+
+            return new Response
+            {
+                Message = "Migrated the database with success!",
+                Type = ResponseType.Success,
+            };
         }
 
         public Response AddLocale(string name, bool required)

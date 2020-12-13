@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using Common;
 using SourceBase;
 
 namespace Core
@@ -28,14 +27,14 @@ namespace Core
                 IEnumerable<ISource> sources = sourcePaths.SelectMany(sourcePath =>
                 {
                     Assembly sourceAssembly = LoadSource(sourcePath);
-                    return CreateSources(sourceAssembly);
+                    return CreateSource(sourceAssembly);
                 }).ToList();
 
                 if (args.Length == 0)
                 {
                     Console.WriteLine("Commands: ");
 
-                    foreach (ISource source in sources) source.UpdateLocale("fr", "es");
+                    foreach (ISource source in sources) source.Initialize();
                 }
                 else
                 {
@@ -72,7 +71,7 @@ namespace Core
             return loadContext.LoadFromAssemblyName(new AssemblyName(Path.GetFileNameWithoutExtension(sourceLocation)));
         }
 
-        private static IEnumerable<ISource> CreateSources(Assembly assembly)
+        private static IEnumerable<ISource> CreateSource(Assembly assembly)
         {
             int count = 0;
 
