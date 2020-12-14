@@ -2,7 +2,7 @@ using System;
 using System.Reflection;
 using System.Runtime.Loader;
 
-namespace Core
+namespace TestCore
 {
     public class SourceLoadContext : AssemblyLoadContext
     {
