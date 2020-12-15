@@ -2,11 +2,11 @@ using System;
 using System.CommandLine;
 using System.CommandLine.Invocation;
 using Common;
+using Core;
+using SourceBase;
 
-namespace ClientCLI
+namespace ClientCLI.Subcommands
 {
-    using SourceBase;
-
     public class Scopes : Command
     {
         private readonly ISource _source;

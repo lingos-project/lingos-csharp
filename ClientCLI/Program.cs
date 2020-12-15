@@ -1,4 +1,5 @@
 ﻿using System.CommandLine;
+using Core;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace ClientCLI
@@ -10,12 +11,12 @@ namespace ClientCLI
         {
             ServiceProvider serviceProvider = new ServiceCollection()
                 .AddSingleton<IPluginsService, PluginsService>()
-                .AddSingleton<Scopes>()
+                .AddSingleton<Subcommands.Scopes>()
                 .BuildServiceProvider();
             
             RootCommand root = new("Command Line Interface for lingos")
             {
-                serviceProvider.GetRequiredService<Scopes>(),
+                serviceProvider.GetRequiredService<Subcommands.Scopes>(),
             };
             
             root.Invoke(args);

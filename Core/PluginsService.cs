@@ -1,7 +1,6 @@
 using SourceBase;
-using Core;
 
-namespace ClientCLI
+namespace Core
 {
 
     public class PluginsService : IPluginsService
