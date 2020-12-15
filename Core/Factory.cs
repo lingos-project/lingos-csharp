@@ -3,12 +3,15 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using SourceBase;
 
 namespace Core
 {
-    public static class Plugin
+    public static class Factory
     {
-        public static Assembly Load(string relativePath)
+        public static ISource GetSource(string relativePath) => CreatePlugin<ISource>(LoadPlugin(relativePath));
+        
+        private static Assembly LoadPlugin(string relativePath)
         {
             string root = Path.GetFullPath(
                 Path.Combine(
@@ -16,7 +19,7 @@ namespace Core
                         Path.GetDirectoryName(
                             Path.GetDirectoryName(
                                 Path.GetDirectoryName(
-                                    Path.GetDirectoryName(typeof(Plugin).Assembly.Location))))) ?? string.Empty));
+                                    Path.GetDirectoryName(typeof(Factory).Assembly.Location))))) ?? string.Empty));
 
             string pluginLocation =
                 Path.GetFullPath(Path.Combine(root, relativePath.Replace('\\', Path.DirectorySeparatorChar)));
@@ -24,25 +27,19 @@ namespace Core
             return loadContext.LoadFromAssemblyName(new AssemblyName(Path.GetFileNameWithoutExtension(pluginLocation)));
         }
 
-        public static IEnumerable<T> Create<T>(Assembly assembly)
+        private static T CreatePlugin<T>(Assembly assembly)
         {
-            int count = 0;
-
             foreach (Type type in assembly.GetTypes())
                 if (typeof(T).IsAssignableFrom(type))
                     if (Activator.CreateInstance(type) is T result)
                     {
-                        count++;
-                        yield return result;
+                        return result;
                     }
 
-            if (count == 0)
-            {
-                string availableTypes = string.Join(",", assembly.GetTypes().Select(t => t.FullName));
-                throw new ApplicationException(
-                    $"Can't find any type which implements {typeof(T).FullName} in {assembly} from {assembly.Location}.\n" +
-                    $"Available types: {availableTypes}");
-            }
+            string availableTypes = string.Join(",", assembly.GetTypes().Select(t => t.FullName));
+            throw new ApplicationException(
+                $"Can't find any type which implements {typeof(T).FullName} in {assembly} from {assembly.Location}.\n" +
+                $"Available types: {availableTypes}");
         }
     }
 }
