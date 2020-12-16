@@ -45,7 +45,9 @@ namespace ClientCLI.Subcommands
 
         private void UpdateScope(string oldName, string newName)
         {
-            Console.WriteLine($"Scope name: {oldName} -> {newName}");
+            Response response = _source.UpdateScope(oldName, newName);
+            
+            Console.WriteLine(response.Message);
         }
     }
 }
