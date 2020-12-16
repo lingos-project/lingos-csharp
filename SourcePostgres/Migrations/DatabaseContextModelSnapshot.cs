@@ -18,6 +18,18 @@ namespace SourcePostgres.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 63)
                 .HasAnnotation("ProductVersion", "5.0.1");
 
+            modelBuilder.Entity("Common.Key", b =>
+                {
+                    b.Property<string>("Name")
+                        .HasColumnType("text")
+                        .HasColumnName("name");
+
+                    b.HasKey("Name")
+                        .HasName("pk_keys");
+
+                    b.ToTable("keys");
+                });
+
             modelBuilder.Entity("Common.Locale", b =>
                 {
                     b.Property<string>("Name")
@@ -56,17 +68,17 @@ namespace SourcePostgres.Migrations
 
             modelBuilder.Entity("Common.Translation", b =>
                 {
-                    b.Property<string>("Key")
+                    b.Property<string>("KeyName")
                         .HasColumnType("text")
-                        .HasColumnName("key");
-
-                    b.Property<string>("LocaleName")
-                        .HasColumnType("text")
-                        .HasColumnName("locale_name");
+                        .HasColumnName("key_name");
 
                     b.Property<string>("ScopeName")
                         .HasColumnType("text")
                         .HasColumnName("scope_name");
+
+                    b.Property<string>("LocaleName")
+                        .HasColumnType("text")
+                        .HasColumnName("locale_name");
 
                     b.Property<string>("Variant")
                         .ValueGeneratedOnAdd()
@@ -79,7 +91,7 @@ namespace SourcePostgres.Migrations
                         .HasColumnType("text")
                         .HasColumnName("text");
 
-                    b.HasKey("Key", "LocaleName", "ScopeName", "Variant")
+                    b.HasKey("KeyName", "ScopeName", "LocaleName", "Variant")
                         .HasName("pk_translations");
 
                     b.HasIndex("LocaleName")
@@ -93,6 +105,13 @@ namespace SourcePostgres.Migrations
 
             modelBuilder.Entity("Common.Translation", b =>
                 {
+                    b.HasOne("Common.Key", "Key")
+                        .WithMany()
+                        .HasForeignKey("KeyName")
+                        .HasConstraintName("fk_translations_keys_key_name")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("Common.Locale", "Locale")
                         .WithMany()
                         .HasForeignKey("LocaleName")
@@ -106,6 +125,8 @@ namespace SourcePostgres.Migrations
                         .HasConstraintName("fk_translations_scopes_scope_name")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Key");
 
                     b.Navigation("Locale");
 

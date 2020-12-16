@@ -15,6 +15,11 @@ namespace SourceBase
         Response UpdateLocale(string oldName, string newName);
         Response DeprecateLocale(string name);
         IEnumerable<Locale> GetLocales();
+        
+        // key
+        Response AddKey(string name);
+        Response UpdateKey(string oldName, string newName);
+        Response DeleteKey(string name);
 
         // scope
         Response AddScope(string name);
@@ -26,7 +31,7 @@ namespace SourceBase
         Response CreateTranslation(string key, string scope, string locale, string text, string? variant);
         
         Response UpdateTranslation(string key, string scope, string locale, string text, string? variant);
-        Response DeleteTranslation(string key, string scope, string locale, string? variant);
+        Response DeleteTranslation(Translation translation);
         Translation GetTranslation(string key, string scope, string locale, string? variant);
         IEnumerable<Translation> GetTranslations();
     }

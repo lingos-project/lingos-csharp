@@ -5,6 +5,7 @@ namespace SourcePostgres
 {
     public class DatabaseContext : DbContext
     {
+        public DbSet<Key> Keys { get; set; }
         public DbSet<Locale> Locales { get; set; }
         public DbSet<Scope> Scopes { get; set; }
         public DbSet<Translation> Translations { get; set; }
@@ -23,7 +24,7 @@ namespace SourcePostgres
         {
             modelBuilder.Entity<Translation>(entity =>
             {
-                entity.HasKey(t => new {t.Key, t.LocaleName, t.ScopeName, t.Variant});
+                entity.HasKey(t => new {t.KeyName, t.ScopeName, t.LocaleName, t.Variant});
                 entity.Property(t => t.Variant).HasDefaultValue("none");
             });
         }

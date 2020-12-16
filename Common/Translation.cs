@@ -5,7 +5,8 @@ namespace Common
 {
     public class Translation
     {
-        public string Key { get; set; }
+        [ForeignKey("Key")]
+        public string KeyName { get; set; }
         [ForeignKey("Locale")]
         public string LocaleName { get; set; }
         [ForeignKey("Scope")]
@@ -15,6 +16,7 @@ namespace Common
         [Required]
         public string Text { get; set; }
         
+        public Key Key { get; set; }
         public Locale Locale { get; set; }
         public Scope Scope { get; set; }
     }

@@ -7,6 +7,17 @@ namespace SourcePostgres.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
+                name: "keys",
+                columns: table => new
+                {
+                    name = table.Column<string>(type: "text", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("pk_keys", x => x.name);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "locales",
                 columns: table => new
                 {
@@ -35,7 +46,7 @@ namespace SourcePostgres.Migrations
                 name: "translations",
                 columns: table => new
                 {
-                    key = table.Column<string>(type: "text", nullable: false),
+                    key_name = table.Column<string>(type: "text", nullable: false),
                     locale_name = table.Column<string>(type: "text", nullable: false),
                     scope_name = table.Column<string>(type: "text", nullable: false),
                     variant = table.Column<string>(type: "text", nullable: false, defaultValue: "none"),
@@ -43,7 +54,14 @@ namespace SourcePostgres.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("pk_translations", x => new { x.key, x.locale_name, x.scope_name, x.variant });
+                    table.PrimaryKey("pk_translations", x => new { x.key_name, x.scope_name, x.locale_name, x.variant });
+                    table.ForeignKey(
+                        name: "fk_translations_keys_key_name",
+                        column: x => x.key_name,
+                        principalTable: "keys",
+                        principalColumn: "name",
+                        onUpdate: ReferentialAction.Cascade,
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "fk_translations_locales_locale_name",
                         column: x => x.locale_name,
@@ -75,6 +93,9 @@ namespace SourcePostgres.Migrations
         {
             migrationBuilder.DropTable(
                 name: "translations");
+
+            migrationBuilder.DropTable(
+                name: "keys");
 
             migrationBuilder.DropTable(
                 name: "locales");
