@@ -28,7 +28,7 @@ namespace SourceBase
         IEnumerable<Scope> GetScopes();
 
         // translation
-        Response CreateTranslation(string key, string scope, string locale, string text, string? variant);
+        Response AddTranslation(string key, string scope, string locale, string text, string variant = "none");
         
         Response UpdateTranslation(string key, string scope, string locale, string text, string? variant);
         Response DeleteTranslation(Translation translation);

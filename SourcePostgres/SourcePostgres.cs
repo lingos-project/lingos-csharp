@@ -290,7 +290,7 @@ namespace SourcePostgres
             return ctx.Scopes.ToList();
         }
 
-        public Response CreateTranslation(string key, string scope, string locale, string text, string? variant)
+        public Response AddTranslation(string key, string scope, string locale, string text, string variant = "none")
         {
             try
             {

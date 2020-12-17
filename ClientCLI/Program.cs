@@ -14,6 +14,7 @@ namespace ClientCLI
                 .AddScoped<Subcommands.Keys>()
                 .AddScoped<Subcommands.Locales>()
                 .AddScoped<Subcommands.Scopes>()
+                .AddScoped<Subcommands.Translations>()
                 .BuildServiceProvider();
             
             RootCommand root = new("Command Line Interface for lingos")
@@ -21,6 +22,7 @@ namespace ClientCLI
                 serviceProvider.GetRequiredService<Subcommands.Keys>(),
                 serviceProvider.GetRequiredService<Subcommands.Locales>(),
                 serviceProvider.GetRequiredService<Subcommands.Scopes>(),
+                serviceProvider.GetRequiredService<Subcommands.Translations>(),
             };
             
             root.Invoke(args);
