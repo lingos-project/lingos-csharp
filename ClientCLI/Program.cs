@@ -10,11 +10,11 @@ namespace ClientCLI
         private static void Main(string[] args)
         {
             ServiceProvider serviceProvider = new ServiceCollection()
-                .AddSingleton<IPluginsService, PluginsService>()
-                .AddScoped<Subcommands.Keys>()
-                .AddScoped<Subcommands.Locales>()
-                .AddScoped<Subcommands.Scopes>()
-                .AddScoped<Subcommands.Translations>()
+                .AddScoped<IPluginsService, PluginsService>()
+                .AddTransient<Subcommands.Keys>()
+                .AddTransient<Subcommands.Locales>()
+                .AddTransient<Subcommands.Scopes>()
+                .AddTransient<Subcommands.Translations>()
                 .BuildServiceProvider();
             
             RootCommand root = new("Command Line Interface for lingos")

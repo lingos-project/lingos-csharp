@@ -290,8 +290,10 @@ namespace SourcePostgres
             return ctx.Scopes.ToList();
         }
 
-        public Response AddTranslation(string key, string scope, string locale, string text, string variant = "none")
+        public Response AddTranslation(string key, string scope, string locale, string text, string variant)
         {
+            string actualVariant = string.IsNullOrEmpty(variant) ? "none" : variant;
+            
             try
             {
                 using DatabaseContext ctx = new();
@@ -301,7 +303,7 @@ namespace SourcePostgres
                     ScopeName = scope,
                     LocaleName = locale,
                     Text = text,
-                    Variant = variant,
+                    Variant = actualVariant,
                 });
 
                 ctx.SaveChanges();
@@ -317,7 +319,7 @@ namespace SourcePostgres
 
             return new Response
             {
-                Message = $"Successfully added a new translation for {scope}.{key}[{variant}] ({locale})!",
+                Message = $"Successfully added a new translation for {scope}.{key}[{actualVariant}] ({locale})!",
                 Type = ResponseType.Success,
             };
         }
