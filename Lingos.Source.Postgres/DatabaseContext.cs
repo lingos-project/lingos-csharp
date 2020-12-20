@@ -17,9 +17,12 @@ namespace Lingos.Source.Postgres
             const string database = "database";
             const string host = "localhost";
             const string port = "5432";
-            optionsBuilder
-                .UseNpgsql($"USER ID={user};Password={pass};Host={host};Port={port};Database={database}")
-                .UseSnakeCaseNamingConvention();
+            if (!optionsBuilder.IsConfigured)
+            {
+                optionsBuilder
+                    .UseNpgsql($"USER ID={user};Password={pass};Host={host};Port={port};Database={database}")
+                    .UseSnakeCaseNamingConvention();
+            }
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

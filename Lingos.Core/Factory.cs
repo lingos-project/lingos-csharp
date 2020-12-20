@@ -27,7 +27,7 @@ namespace Lingos.Core
             Console.WriteLine(x);
         }
         
-        private static Assembly LoadPlugin(string relativePath)
+        internal static Assembly LoadPlugin(string relativePath)
         {
             string root = Path.GetFullPath(
                 Path.Combine(
@@ -43,7 +43,7 @@ namespace Lingos.Core
             return loadContext.LoadFromAssemblyName(new AssemblyName(Path.GetFileNameWithoutExtension(pluginLocation)));
         }
 
-        private static T CreatePlugin<T>(Assembly assembly)
+        internal static T CreatePlugin<T>(Assembly assembly)
         {
             foreach (Type type in assembly.GetTypes())
                 if (typeof(T).IsAssignableFrom(type))

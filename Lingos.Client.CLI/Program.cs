@@ -25,6 +25,7 @@ namespace Lingos.Client.CLI
                 serviceProvider.GetRequiredService<Scopes>(),
                 serviceProvider.GetRequiredService<Translations>(),
             };
+
             
             root.Invoke(args);
         }
