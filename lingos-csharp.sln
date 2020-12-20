@@ -3,15 +3,15 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.26124.0
 MinimumVisualStudioVersion = 15.0.26124.0
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClientCLI", "ClientCLI\ClientCLI.csproj", "{A1A64050-58B7-4CC8-8C7F-14C9A61E8100}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lingos.Client.CLI", "Lingos.Client.CLI\Lingos.Client.CLI.csproj", "{A1A64050-58B7-4CC8-8C7F-14C9A61E8100}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SourceBase", "SourceBase\SourceBase.csproj", "{2D8621E7-986E-42E4-B2F7-8448DEFA0CD8}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lingos.Source.Base", "Lingos.Source.Base\Lingos.Source.Base.csproj", "{2D8621E7-986E-42E4-B2F7-8448DEFA0CD8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Common", "Common\Common.csproj", "{F17CB4D5-A989-4D72-B3E1-2764D4C613CE}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lingos.Common", "Lingos.Common\Lingos.Common.csproj", "{F17CB4D5-A989-4D72-B3E1-2764D4C613CE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SourcePostgres", "SourcePostgres\SourcePostgres.csproj", "{7FDB6C03-1EC0-491B-A6D6-F17A5D406193}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lingos.Source.Postgres", "Lingos.Source.Postgres\Lingos.Source.Postgres.csproj", "{7FDB6C03-1EC0-491B-A6D6-F17A5D406193}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Core", "Core\Core.csproj", "{1D7AD70D-9673-4F55-BF5C-43FD08A98A9A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lingos.Core", "Lingos.Core\Lingos.Core.csproj", "{1D7AD70D-9673-4F55-BF5C-43FD08A98A9A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
