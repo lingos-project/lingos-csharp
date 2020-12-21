@@ -8,10 +8,8 @@ using YamlDotNet.Serialization.NamingConventions;
 
 namespace Lingos.Core
 {
-    public static class Factory
+    public static class PluginFactory
     {
-        public static ISource GetSource(string relativePath) => CreatePlugin<ISource>(LoadPlugin(relativePath));
-
         public static void LoadConfigFile(string filePath = "lingosrc.yml")
         {
             LoadConfig(File.OpenText(filePath));
@@ -35,7 +33,7 @@ namespace Lingos.Core
                         Path.GetDirectoryName(
                             Path.GetDirectoryName(
                                 Path.GetDirectoryName(
-                                    Path.GetDirectoryName(typeof(Factory).Assembly.Location))))) ?? string.Empty));
+                                    Path.GetDirectoryName(typeof(PluginFactory).Assembly.Location))))) ?? string.Empty));
 
             string pluginLocation =
                 Path.GetFullPath(Path.Combine(root, relativePath.Replace('\\', Path.DirectorySeparatorChar)));
@@ -43,14 +41,32 @@ namespace Lingos.Core
             return loadContext.LoadFromAssemblyName(new AssemblyName(Path.GetFileNameWithoutExtension(pluginLocation)));
         }
 
-        internal static T CreatePlugin<T>(Assembly assembly)
+        internal static Type GetPluginType<T>(Assembly assembly)
         {
             foreach (Type type in assembly.GetTypes())
+            {
                 if (typeof(T).IsAssignableFrom(type))
-                    if (Activator.CreateInstance(type) is T result)
-                    {
-                        return result;
-                    }
+                {
+                    return type;
+                }
+            }
+
+            string availableTypes = string.Join(",", assembly.GetTypes().Select(t => t.FullName));
+            throw new ApplicationException(
+                $"Can't find any type which implements {typeof(T).FullName} in {assembly} from {assembly.Location}.\n" +
+                $"Available types: {availableTypes}");
+            
+        }
+
+        internal static (Type, T) CreatePlugin<T>(Assembly assembly)
+        {
+            foreach (Type type in assembly.GetTypes())
+            {
+                if (typeof(T).IsAssignableFrom(type) && Activator.CreateInstance(type) is T result)
+                {
+                    return (type, result);
+                }
+            }
 
             string availableTypes = string.Join(",", assembly.GetTypes().Select(t => t.FullName));
             throw new ApplicationException(

@@ -2,7 +2,7 @@ using System;
 using System.CommandLine;
 using System.CommandLine.Invocation;
 using Lingos.Common;
-using Lingos.Core;
+using Lingos.Core.Services;
 using Lingos.Source.Base;
 
 namespace Lingos.Client.CLI.Subcommands
@@ -11,9 +11,9 @@ namespace Lingos.Client.CLI.Subcommands
     {
         private readonly ISource _source;
         
-        public Translations(IPluginsService pluginsService) : base("translations", "Add or manage translations")
+        public Translations(ISource source) : base("translations", "Add or manage translations")
         {
-            _source = pluginsService.Source;
+            _source = source;
             
             LoadCommands();
         }

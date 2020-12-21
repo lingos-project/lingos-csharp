@@ -2,7 +2,7 @@ using System;
 using System.CommandLine;
 using System.CommandLine.Invocation;
 using Lingos.Common;
-using Lingos.Core;
+using Lingos.Core.Services;
 using Lingos.Source.Base;
 
 namespace Lingos.Client.CLI.Subcommands
@@ -11,9 +11,9 @@ namespace Lingos.Client.CLI.Subcommands
     {
         private readonly ISource _source;
         
-        public Scopes(IPluginsService pluginsService) : base("scopes", "Add or manage scopes")
+        public Scopes(ISource source) : base("scopes", "Add or manage scopes")
         {
-            _source = pluginsService.Source;
+            _source = source;
             
             LoadCommands();
         }

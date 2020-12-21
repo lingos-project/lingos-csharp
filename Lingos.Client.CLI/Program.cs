@@ -1,6 +1,7 @@
 ﻿using System.CommandLine;
 using Lingos.Client.CLI.Subcommands;
 using Lingos.Core;
+using Lingos.Core.Services;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Lingos.Client.CLI
@@ -10,8 +11,8 @@ namespace Lingos.Client.CLI
     {
         private static void Main(string[] args)
         {
-            ServiceProvider serviceProvider = new ServiceCollection()
-                .AddScoped<IPluginsService, PluginsService>()
+            ServiceProvider serviceProvider = LingosContainer
+                .GetContainer()
                 .AddTransient<Keys>()
                 .AddTransient<Locales>()
                 .AddTransient<Scopes>()

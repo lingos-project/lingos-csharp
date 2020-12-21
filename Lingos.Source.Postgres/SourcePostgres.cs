@@ -5,11 +5,24 @@ using System.Linq;
 using Lingos.Common;
 using Lingos.Source.Base;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Lingos.Source.Postgres
 {
     public class SourcePostgres : ISource
     {
+        private readonly DatabaseContext _ctx;
+        
+        public SourcePostgres(DatabaseContext ctx)
+        {
+            _ctx = ctx;
+        }
+        
+        public static void AddServices(IServiceCollection container)
+        {
+            container.AddSingleton<DatabaseContext>();
+        }
+        
         public Response Initialize()
         {
             return Migrate();
@@ -19,8 +32,7 @@ namespace Lingos.Source.Postgres
         {
             try
             {
-                using DatabaseContext ctx = new();
-                ctx.Database.Migrate();
+                _ctx.Database.Migrate();
             }
             catch (Exception e)
             {
@@ -42,14 +54,13 @@ namespace Lingos.Source.Postgres
         {
             try
             {
-                using DatabaseContext ctx = new();
-                ctx.Locales.Add(new Locale
+                _ctx.Locales.Add(new Locale
                 {
                     Name = name,
                     Required = required
                 });
 
-                ctx.SaveChanges();
+                _ctx.SaveChanges();
             }
             catch (Exception e)
             {
@@ -71,8 +82,7 @@ namespace Lingos.Source.Postgres
         {
             try
             {
-                using DatabaseContext ctx = new();
-                ctx.Database
+                _ctx.Database
                     .ExecuteSqlInterpolated($"UPDATE locales SET name={newName} WHERE name={oldName}");
             }
             catch (Exception e)
@@ -95,14 +105,13 @@ namespace Lingos.Source.Postgres
         {
             try
             {
-                using DatabaseContext ctx = new();
-                ctx.Locales.Update(new Locale
+                _ctx.Locales.Update(new Locale
                 {
                     Name = name,
                     Deprecated = true,
                 });
 
-                ctx.SaveChanges();
+                _ctx.SaveChanges();
             }
             catch (Exception e)
             {
@@ -122,21 +131,19 @@ namespace Lingos.Source.Postgres
 
         public IEnumerable<Locale> GetLocales()
         {
-            using DatabaseContext ctx = new();
-            return ctx.Locales.ToList();
+            return _ctx.Locales.ToList();
         }
 
         public Response AddKey(string name)
         {
             try
             {
-                using DatabaseContext ctx = new();
-                ctx.Keys.Add(new Key
+                _ctx.Keys.Add(new Key
                 {
                     Name = name,
                 });
 
-                ctx.SaveChanges();
+                _ctx.SaveChanges();
             }
             catch (Exception e)
             {
@@ -158,8 +165,7 @@ namespace Lingos.Source.Postgres
         {
             try
             {
-                using DatabaseContext ctx = new();
-                ctx.Database
+                _ctx.Database
                     .ExecuteSqlInterpolated($"UPDATE keys SET name={newName} WHERE name={oldName}");
             }
             catch (Exception e)
@@ -182,10 +188,9 @@ namespace Lingos.Source.Postgres
         {
             try
             {
-                using DatabaseContext ctx = new();
-                ctx.Keys.Remove(new Key { Name = name });
+                _ctx.Keys.Remove(new Key { Name = name });
                 
-                ctx.SaveChanges();
+                _ctx.SaveChanges();
             }
             catch (Exception ex)
             {
@@ -207,13 +212,12 @@ namespace Lingos.Source.Postgres
         {
             try
             {
-                using DatabaseContext ctx = new();
-                ctx.Scopes.Add(new Scope
+                _ctx.Scopes.Add(new Scope
                 {
                     Name = name,
                 });
                 
-                ctx.SaveChanges();
+                _ctx.SaveChanges();
             }
             catch (Exception e)
             {
@@ -235,8 +239,7 @@ namespace Lingos.Source.Postgres
         {
             try
             {
-                using DatabaseContext ctx = new();
-                ctx.Database
+                _ctx.Database
                     .ExecuteSqlInterpolated($"UPDATE scopes SET name={newName} WHERE name={oldName}");
             }
             catch (Exception e)
@@ -259,14 +262,13 @@ namespace Lingos.Source.Postgres
         {
             try
             {
-                using DatabaseContext ctx = new();
-                ctx.Scopes.Update(new Scope
+                _ctx.Scopes.Update(new Scope
                 {
                     Name = name,
                     Deprecated = true,
                 });
                 
-                ctx.SaveChanges();
+                _ctx.SaveChanges();
             }
             catch (Exception e)
             {
@@ -286,8 +288,7 @@ namespace Lingos.Source.Postgres
 
         public IEnumerable<Scope> GetScopes()
         {
-            using DatabaseContext ctx = new();
-            return ctx.Scopes.ToList();
+            return _ctx.Scopes.ToList();
         }
 
         public Response AddTranslation(string key, string scope, string locale, string text, string variant)
@@ -296,8 +297,7 @@ namespace Lingos.Source.Postgres
             
             try
             {
-                using DatabaseContext ctx = new();
-                ctx.Translations.Add(new Translation
+                _ctx.Translations.Add(new Translation
                 {
                     KeyName = key,
                     ScopeName = scope,
@@ -306,7 +306,7 @@ namespace Lingos.Source.Postgres
                     Variant = actualVariant,
                 });
 
-                ctx.SaveChanges();
+                _ctx.SaveChanges();
             }
             catch (Exception ex)
             {
@@ -328,8 +328,7 @@ namespace Lingos.Source.Postgres
         {
             try
             {
-                using DatabaseContext ctx = new();
-                ctx.Translations.Update(new Translation
+                _ctx.Translations.Update(new Translation
                 {
                     KeyName = key,
                     ScopeName = scope,
@@ -338,7 +337,7 @@ namespace Lingos.Source.Postgres
                     Variant = variant,
                 });
 
-                ctx.SaveChanges();
+                _ctx.SaveChanges();
             }
             catch (Exception ex)
             {
@@ -360,10 +359,9 @@ namespace Lingos.Source.Postgres
         {
             try
             {
-                using DatabaseContext ctx = new();
-                ctx.Translations.Remove(translation);
+                _ctx.Translations.Remove(translation);
                 
-                ctx.SaveChanges();
+                _ctx.SaveChanges();
             }
             catch (Exception ex)
             {
@@ -384,8 +382,7 @@ namespace Lingos.Source.Postgres
 
         public Translation GetTranslation(string key, string scope, string locale, string? variant)
         {
-            using DatabaseContext ctx = new();
-            return ctx.Translations.Find(new Translation
+            return _ctx.Translations.Find(new Translation
             {
                 KeyName = key,
                 ScopeName = scope,
@@ -396,8 +393,7 @@ namespace Lingos.Source.Postgres
 
         public IEnumerable<Translation> GetTranslations()
         {
-            using DatabaseContext ctx = new();
-            return ctx.Translations.ToList();
+            return _ctx.Translations.ToList();
         }
     }
 }
