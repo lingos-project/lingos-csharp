@@ -57,21 +57,5 @@ namespace Lingos.Core
                 $"Available types: {availableTypes}");
             
         }
-
-        internal static (Type, T) CreatePlugin<T>(Assembly assembly)
-        {
-            foreach (Type type in assembly.GetTypes())
-            {
-                if (typeof(T).IsAssignableFrom(type) && Activator.CreateInstance(type) is T result)
-                {
-                    return (type, result);
-                }
-            }
-
-            string availableTypes = string.Join(",", assembly.GetTypes().Select(t => t.FullName));
-            throw new ApplicationException(
-                $"Can't find any type which implements {typeof(T).FullName} in {assembly} from {assembly.Location}.\n" +
-                $"Available types: {availableTypes}");
-        }
     }
 }

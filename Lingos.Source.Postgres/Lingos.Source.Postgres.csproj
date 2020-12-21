@@ -10,6 +10,10 @@
             <Private>false</Private>
             <ExcludeAssets>runtime</ExcludeAssets>
         </ProjectReference>
+        <ProjectReference Include="..\Lingos.Core\Lingos.Core.csproj">
+            <Private>false</Private>
+            <ExcludeAssets>runtime</ExcludeAssets>
+        </ProjectReference>
         <ProjectReference Include="..\Lingos.Source.Base\Lingos.Source.Base.csproj">
             <Private>false</Private>
             <ExcludeAssets>runtime</ExcludeAssets>

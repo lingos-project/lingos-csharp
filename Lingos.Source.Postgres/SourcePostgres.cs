@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Lingos.Common;
+using Lingos.Core.Services;
 using Lingos.Source.Base;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -17,10 +18,16 @@ namespace Lingos.Source.Postgres
         {
             _ctx = ctx;
         }
-        
-        public static void AddServices(IServiceCollection container)
+
+        public static PluginServices GetPluginServices()
         {
-            container.AddSingleton<DatabaseContext>();
+            return new()
+            {
+                TransientServices = new []
+                {
+                    (typeof(DatabaseContext), typeof(DatabaseContext))
+                },
+            };
         }
         
         public Response Initialize()

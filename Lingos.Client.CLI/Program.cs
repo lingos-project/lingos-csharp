@@ -11,8 +11,7 @@ namespace Lingos.Client.CLI
     {
         private static void Main(string[] args)
         {
-            ServiceProvider serviceProvider = LingosContainer
-                .GetContainer()
+            ServiceProvider serviceProvider = new LingosServiceCollection()
                 .AddTransient<Keys>()
                 .AddTransient<Locales>()
                 .AddTransient<Scopes>()

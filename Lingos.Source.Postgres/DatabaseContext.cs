@@ -9,7 +9,7 @@ namespace Lingos.Source.Postgres
         public DbSet<Locale> Locales { get; set; }
         public DbSet<Scope> Scopes { get; set; }
         public DbSet<Translation> Translations { get; set; }
-        
+
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             const string user = "user";
