@@ -2,29 +2,11 @@
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using Lingos.Source.Base;
-using YamlDotNet.Serialization;
-using YamlDotNet.Serialization.NamingConventions;
 
 namespace Lingos.Core
 {
     public static class PluginFactory
     {
-        public static void LoadConfigFile(string filePath = "lingosrc.yml")
-        {
-            LoadConfig(File.OpenText(filePath));
-        }
-
-        private static void LoadConfig(TextReader config)
-        {
-            IDeserializer deserializer = new DeserializerBuilder()
-                .WithNamingConvention(CamelCaseNamingConvention.Instance)
-                .Build();
-
-            var x = deserializer.Deserialize(config);
-            Console.WriteLine(x);
-        }
-        
         internal static Assembly LoadPlugin(string relativePath)
         {
             string root = Path.GetFullPath(

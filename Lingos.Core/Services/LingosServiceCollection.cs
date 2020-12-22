@@ -9,8 +9,8 @@ namespace Lingos.Core.Services
     {
         public LingosServiceCollection()
         {
-            ConfigService config = new();
-            Assembly sourcePlugin = PluginFactory.LoadPlugin(config.SourcePath);
+            Config config = Config.GetConfigFromFile("/home/bazoo/documents/projects/lingos-project/lingos-csharp/lingosrc.yml");
+            Assembly sourcePlugin = PluginFactory.LoadPlugin(config.Source);
             
             this.AddPluginServices<ISource>(sourcePlugin);
             this.AddSingleton(config);
