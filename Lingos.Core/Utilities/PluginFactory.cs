@@ -3,7 +3,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 
-namespace Lingos.Core
+namespace Lingos.Core.Utilities
 {
     public static class PluginFactory
     {

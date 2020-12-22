@@ -2,7 +2,6 @@ using System;
 using System.CommandLine;
 using System.CommandLine.Invocation;
 using Lingos.Common;
-using Lingos.Core.Services;
 using Lingos.Source.Base;
 
 namespace Lingos.Client.CLI.Subcommands

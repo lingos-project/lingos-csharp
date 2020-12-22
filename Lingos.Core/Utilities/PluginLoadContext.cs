@@ -2,7 +2,7 @@ using System;
 using System.Reflection;
 using System.Runtime.Loader;
 
-namespace Lingos.Core
+namespace Lingos.Core.Utilities
 {
     public class PluginLoadContext : AssemblyLoadContext
     {

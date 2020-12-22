@@ -1,7 +1,7 @@
 ﻿using System.CommandLine;
 using Lingos.Client.CLI.Subcommands;
-using Lingos.Core;
-using Lingos.Core.Services;
+using Lingos.Core.Extensions;
+using Lingos.Core.Utilities;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Lingos.Client.CLI
@@ -11,7 +11,9 @@ namespace Lingos.Client.CLI
     {
         private static void Main(string[] args)
         {
-            ServiceProvider serviceProvider = new LingosServiceCollection()
+            Config config = Config.GetConfigFromFile("/home/bazoo/documents/projects/lingos-project/lingos-csharp/lingosrc.yml");
+            ServiceProvider serviceProvider = new ServiceCollection()
+                .AddConfigPlugins(config)
                 .AddTransient<Keys>()
                 .AddTransient<Locales>()
                 .AddTransient<Scopes>()
@@ -25,7 +27,6 @@ namespace Lingos.Client.CLI
                 serviceProvider.GetRequiredService<Scopes>(),
                 serviceProvider.GetRequiredService<Translations>(),
             };
-
             
             root.Invoke(args);
         }

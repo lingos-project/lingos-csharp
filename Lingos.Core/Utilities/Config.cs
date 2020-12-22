@@ -3,14 +3,14 @@ using System.IO;
 using YamlDotNet.Serialization;
 using YamlDotNet.Serialization.NamingConventions;
 
-namespace Lingos.Core
+namespace Lingos.Core.Utilities
 {
     public class Config
     {
-        public string Source { get; set; }
-        public Dictionary<string, Dictionary<string, object>> Plugins { get; set; }
+        public string Source { get; init; }
+        public Dictionary<string, Dictionary<string, object>> Plugins { get; init; }
         
-        public static Config GetConfigFromFile(string filePath = "lingosrc.yml")
+        public static Config GetConfigFromFile(string filePath)
         {
             return GetConfig(File.OpenText(filePath));
         }

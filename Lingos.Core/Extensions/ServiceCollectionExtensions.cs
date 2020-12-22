@@ -1,20 +1,32 @@
 using System;
-using System.Collections.Generic;
 using System.Reflection;
 using Lingos.Core.Services;
+using Lingos.Core.Utilities;
+using Lingos.Source.Base;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Lingos.Core.Extensions
 {
-    internal static class ServiceCollectionExtension
+    public static class ServiceCollectionExtension
     {
+        public static IServiceCollection AddConfigPlugins(this IServiceCollection container, Config config)
+        {
+            Assembly sourcePlugin = PluginFactory.LoadPlugin(config.Source);
+            
+            return container
+                .AddPluginServices<ISource>(sourcePlugin)
+                .AddSingleton(config);
+        }
+        
+         
         /// <summary>
         /// Loads plugin, register it as a service and add its own services
         /// </summary>
         /// <param name="container"></param>
         /// <param name="plugin"></param>
         /// <typeparam name="T"></typeparam>
-        internal static void AddPluginServices<T>(this IServiceCollection container, Assembly plugin)
+        /// <returns></returns>
+        internal static IServiceCollection AddPluginServices<T>(this IServiceCollection container, Assembly plugin)
         {
             Type pluginType = PluginFactory.GetPluginType<T>(plugin);
             MethodInfo method = pluginType.GetMethod("GetPluginServices");
@@ -33,7 +45,8 @@ namespace Lingos.Core.Extensions
                     container.AddSingleton(serviceType, implementationType);
                 }
             }
-            container.AddSingleton(typeof(T), pluginType);
+            
+            return container.AddSingleton(typeof(T), pluginType);
         }
     }
 }
