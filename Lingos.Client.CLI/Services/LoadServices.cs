@@ -4,13 +4,12 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Lingos.Client.CLI.Services
 {
-    public static class LoadServices
+    internal static class LoadServices
     {
-        public static ServiceProvider AddServices(Config config)
+        internal static ServiceProvider AddServices(Config config)
         {
             return new ServiceCollection()
                 .AddConfigPlugins(config)
-                .AddTransient<Handlers>()
                 .BuildServiceProvider();
         }
     }

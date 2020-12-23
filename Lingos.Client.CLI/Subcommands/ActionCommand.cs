@@ -2,9 +2,9 @@ using System.CommandLine;
 
 namespace Lingos.Client.CLI.Subcommands
 {
-    public class Action : Command
+    internal class ActionCommand : Command
     {
-        public Action(string name, string description) : base(name, description)
+        internal ActionCommand(string name, string description) : base(name, description)
         {
             Add(new Option<string>(new []{"-c", "--config"}, "Configuration file"));
         }

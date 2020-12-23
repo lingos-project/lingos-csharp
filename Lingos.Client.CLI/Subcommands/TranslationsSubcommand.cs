@@ -1,21 +1,24 @@
+using System;
 using System.CommandLine;
 using System.CommandLine.Invocation;
 using Lingos.Client.CLI.Services;
+using Lingos.Common;
 using Lingos.Core.Utilities;
+using Lingos.Source.Base;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Lingos.Client.CLI.Subcommands
 {
-    public class TranslationsSubcommand : Command
+    internal class TranslationsSubcommand : Command
     {
-        public TranslationsSubcommand() : base("translations", "Add or manage translations")
+        internal TranslationsSubcommand() : base("translations", "Add or manage translations")
         {
             LoadCommands();
         }
 
         private void LoadCommands()
         {
-            Action add = new("add", "Add a new translation")
+            ActionCommand add = new("add", "Add a new translation")
             {
                 new Argument<string>("key", "The key of the translation"),
                 new Argument<string>("scope", "The scope of the translation"),
@@ -26,7 +29,7 @@ namespace Lingos.Client.CLI.Subcommands
             add.Handler = CommandHandler.Create<string, string, string, string, string, string>(AddTranslation);
             Add(add);
             
-            Action update = new("update", "Update a new translation")
+            ActionCommand update = new("update", "Update a new translation")
             {
                 new Argument<string>("key", "The key of the translation"),
                 new Argument<string>("scope", "The scope of the translation"),
@@ -42,7 +45,9 @@ namespace Lingos.Client.CLI.Subcommands
         {
             ServiceProvider services = LoadServices.AddServices(Config.GetConfigFromFile(config));
 
-            services.GetRequiredService<Handlers>().AddTranslation(key, scope, locale, text, variant);
+            Response response = services.GetRequiredService<ISource>().AddTranslation(key, scope, locale, text, variant);
+            
+            Console.WriteLine(response.Message);
         }
 
         private static void UpdateTranslation(string key, string scope, string locale, string text, string variant,
@@ -50,7 +55,9 @@ namespace Lingos.Client.CLI.Subcommands
         {
             ServiceProvider services = LoadServices.AddServices(Config.GetConfigFromFile(config));
 
-            services.GetRequiredService<Handlers>().UpdateTranslation(key, scope, locale, text, variant);
+            Response response = services.GetRequiredService<ISource>().UpdateTranslation(key, scope, locale, text, variant);
+            
+            Console.WriteLine(response.Message);
         }
     }
 }

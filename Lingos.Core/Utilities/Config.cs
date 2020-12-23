@@ -12,7 +12,8 @@ namespace Lingos.Core.Utilities
         
         public static Config GetConfigFromFile(string filePath)
         {
-            return GetConfig(File.OpenText(filePath));
+            string actualFilePath = string.IsNullOrEmpty(filePath) ? "./lingosrc.yml" : filePath;
+            return GetConfig(File.OpenText(actualFilePath));
         }
 
         private static Config GetConfig(TextReader textConfig)

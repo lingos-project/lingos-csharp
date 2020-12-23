@@ -1,28 +1,31 @@
+using System;
 using System.CommandLine;
 using System.CommandLine.Invocation;
 using Lingos.Client.CLI.Services;
+using Lingos.Common;
 using Lingos.Core.Utilities;
+using Lingos.Source.Base;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Lingos.Client.CLI.Subcommands
 {
-    public class ScopesSubcommand : Command
+    internal class ScopesSubcommand : Command
     {
-        public ScopesSubcommand() : base("scopes", "Add or manage scopes")
+        internal ScopesSubcommand() : base("scopes", "Add or manage scopes")
         {
             LoadCommands();
         }
 
         private void LoadCommands()
         {
-            Action add = new("add", "Add a new scope")
+            ActionCommand add = new("add", "Add a new scope")
             {
                 new Argument<string>("name", "The name of the scope"),
             };
             add.Handler = CommandHandler.Create<string, string>(AddScope);
             Add(add);
 
-            Action update = new("update", "Update the name of a scope")
+            ActionCommand update = new("update", "Update the name of a scope")
             {
                 new Argument<string>("oldName", "The old name of the scope"),
                 new Argument<string>("newName", "The new name of the scope"),
@@ -35,14 +38,18 @@ namespace Lingos.Client.CLI.Subcommands
         {
             ServiceProvider services = LoadServices.AddServices(Config.GetConfigFromFile(config));
 
-            services.GetRequiredService<Handlers>().AddScope(name);
+            Response response = services.GetRequiredService<ISource>().AddScope(name);
+            
+            Console.WriteLine(response.Message);
         }
         
         private static void UpdateScope(string oldName, string newName, string config)
         {
             ServiceProvider services = LoadServices.AddServices(Config.GetConfigFromFile(config));
 
-            services.GetRequiredService<Handlers>().UpdateScope(oldName, newName);
+            Response response = services.GetRequiredService<ISource>().UpdateScope(oldName, newName);
+            
+            Console.WriteLine(response.Message);
         }
     }
 }
