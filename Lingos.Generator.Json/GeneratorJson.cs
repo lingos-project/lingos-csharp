@@ -21,7 +21,11 @@ namespace Lingos.Generator.Json
         public void Generate()
         {
             IEnumerable<Translation> translations = _source.GetTranslations();
-            throw new NotImplementedException();
+            
+            foreach (Translation translation in translations)
+            {
+                Console.WriteLine($"{translation.Key} : {translation.Text}");
+            }
         }
     }
 }
