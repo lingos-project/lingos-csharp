@@ -1,7 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Lingos.Common
+namespace Lingos.Core.Models
 {
     public class Translation
     {

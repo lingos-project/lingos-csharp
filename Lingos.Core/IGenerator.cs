@@ -1,4 +1,4 @@
-﻿namespace Lingos.Generator.Base
+﻿namespace Lingos.Core
 {
     public interface IGenerator
     {

@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace Lingos.Common
+namespace Lingos.Core.Models
 {
     public class Key
     {

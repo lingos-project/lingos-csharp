@@ -1,8 +1,9 @@
 #nullable enable
 using System.Collections.Generic;
-using Lingos.Common;
+using Lingos.Core.Models;
+using Lingos.Core.Utilities;
 
-namespace Lingos.Source.Base
+namespace Lingos.Core
 {
     public interface ISource
     {

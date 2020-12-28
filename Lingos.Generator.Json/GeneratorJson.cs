@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using Lingos.Common;
 using Lingos.Core.Utilities;
-using Lingos.Generator.Base;
-using Lingos.Source.Base;
+using Lingos.Core;
+using Lingos.Core.Models;
 
 namespace Lingos.Generator.Json
 {

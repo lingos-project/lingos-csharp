@@ -2,9 +2,10 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Lingos.Common;
+using Lingos.Core;
+using Lingos.Core.Models;
 using Lingos.Core.Services;
-using Lingos.Source.Base;
+using Lingos.Core.Utilities;
 using Microsoft.EntityFrameworkCore;
 
 namespace Lingos.Source.Postgres

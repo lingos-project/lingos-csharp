@@ -2,9 +2,8 @@ using System;
 using System.CommandLine;
 using System.CommandLine.Invocation;
 using Lingos.Client.CLI.Services;
-using Lingos.Common;
 using Lingos.Core.Utilities;
-using Lingos.Source.Base;
+using Lingos.Core;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Lingos.Client.CLI.Subcommands

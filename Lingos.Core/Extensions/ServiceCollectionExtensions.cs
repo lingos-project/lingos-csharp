@@ -4,8 +4,6 @@ using System.Linq;
 using System.Reflection;
 using Lingos.Core.Services;
 using Lingos.Core.Utilities;
-using Lingos.Generator.Base;
-using Lingos.Source.Base;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Lingos.Core.Extensions

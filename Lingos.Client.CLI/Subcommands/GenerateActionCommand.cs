@@ -1,8 +1,8 @@
 using System.Collections.Generic;
 using System.CommandLine.Invocation;
 using Lingos.Client.CLI.Services;
+using Lingos.Core;
 using Lingos.Core.Utilities;
-using Lingos.Generator.Base;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Lingos.Client.CLI.Subcommands

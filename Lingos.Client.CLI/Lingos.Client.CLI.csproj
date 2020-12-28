@@ -8,8 +8,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Lingos.Core\Lingos.Core.csproj" />
-    <ProjectReference Include="..\Lingos.Source.Base\Lingos.Source.Base.csproj" />
-    <ProjectReference Include="..\Lingos.Generator.Base\Lingos.Generator.Base.csproj" />
   </ItemGroup>
 
   <ItemGroup>

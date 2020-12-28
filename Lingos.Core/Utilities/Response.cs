@@ -1,4 +1,4 @@
-namespace Lingos.Common
+namespace Lingos.Core.Utilities
 {
     public class Response
     {

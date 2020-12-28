@@ -1,12 +1,11 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace Lingos.Common
+namespace Lingos.Core.Models
 {
-    public class Locale
+    public class Scope
     {
         [Key]
         public string Name { get; set; }
-        public bool Required { get; set; }
         public bool Deprecated { get; set; }
     }
 }
