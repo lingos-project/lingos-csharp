@@ -8,6 +8,7 @@ namespace Lingos.Core.Utilities
     public class Config
     {
         public string Source { get; init; }
+        public IEnumerable<string> Generators { get; init; }
         public Dictionary<string, Dictionary<string, object>> Plugins { get; init; }
         
         public static Config GetConfigFromFile(string filePath)

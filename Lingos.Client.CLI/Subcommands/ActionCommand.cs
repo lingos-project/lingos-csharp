@@ -6,7 +6,7 @@ namespace Lingos.Client.CLI.Subcommands
     {
         internal ActionCommand(string name, string description) : base(name, description)
         {
-            Add(new Option<string>(new []{"-c", "--config"}, "Configuration file"));
+            Add(new Option<string>(new []{"-cfg", "--config"}, "Configuration file"));
         }
     }
 }

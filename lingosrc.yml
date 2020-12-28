@@ -1,4 +1,6 @@
 source: "Lingos.Source.Postgres/bin/Debug/net5.0/Lingos.Source.Postgres.dll"
+generators:
+  - "Lingos.Generator.Json/bin/Debug/net5.0/Lingos.Generator.Json.dll"
 plugins:
   sourcePostgres:
     user: "user"
@@ -6,3 +8,15 @@ plugins:
     database: "database"
     host: "localhost"
     port: "5432"
+  generatorJson:
+    output: "./out.json"
+    format:
+      scope:
+        locale:
+          key:
+            variant:
+              - key
+              - locale
+              - scope
+              - variant
+              - text

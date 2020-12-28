@@ -34,7 +34,6 @@ namespace Lingos.Client.CLI.Subcommands
             };
             update.Handler = CommandHandler.Create<string, string, string>(UpdateLocale); 
             Add(update);
-            
         }
 
         private static void AddLocale(string name, bool required, string config)

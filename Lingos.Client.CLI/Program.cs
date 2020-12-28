@@ -14,6 +14,8 @@ namespace Lingos.Client.CLI
                 new LocalesSubcommand(),
                 new ScopesSubcommand(),
                 new TranslationsSubcommand(),
+                new InitActionCommand(),
+                new GenerateActionCommand(),
             };
             
             root.Invoke(args);

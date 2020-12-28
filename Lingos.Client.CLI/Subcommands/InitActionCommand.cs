@@ -1,5 +1,7 @@
+using System;
 using System.CommandLine.Invocation;
 using Lingos.Client.CLI.Services;
+using Lingos.Common;
 using Lingos.Core.Utilities;
 using Lingos.Source.Base;
 using Microsoft.Extensions.DependencyInjection;
@@ -17,7 +19,11 @@ namespace Lingos.Client.CLI.Subcommands
         {
             ServiceProvider services = LoadServices.AddServices(Config.GetConfigFromFile(config));
 
-            services.GetRequiredService<ISource>().Initialize();
+            ISource source = services.GetRequiredService<ISource>();
+
+            Response response = source.Initialize();
+            
+            Console.WriteLine(response.Message);
         }
     }
 }

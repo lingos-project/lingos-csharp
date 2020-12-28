@@ -6,7 +6,6 @@ using Lingos.Common;
 using Lingos.Core.Services;
 using Lingos.Source.Base;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
 
 namespace Lingos.Source.Postgres
 {
