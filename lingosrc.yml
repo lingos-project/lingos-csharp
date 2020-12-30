@@ -14,9 +14,9 @@ plugins:
       scope:
         locale:
           key:
-            variant:
-              - key
-              - locale
-              - scope
-              - variant
-              - text
+          variant:
+            - key
+            - locale
+            - scope
+            - variant
+            - text

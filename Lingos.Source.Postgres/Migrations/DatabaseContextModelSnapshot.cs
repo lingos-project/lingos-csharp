@@ -18,7 +18,7 @@ namespace Lingos.Source.Postgres.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 63)
                 .HasAnnotation("ProductVersion", "5.0.1");
 
-            modelBuilder.Entity("Lingos.Common.Key", b =>
+            modelBuilder.Entity("Lingos.Core.Models.Key", b =>
                 {
                     b.Property<string>("Name")
                         .HasColumnType("text")
@@ -30,7 +30,7 @@ namespace Lingos.Source.Postgres.Migrations
                     b.ToTable("keys");
                 });
 
-            modelBuilder.Entity("Lingos.Common.Locale", b =>
+            modelBuilder.Entity("Lingos.Core.Models.Locale", b =>
                 {
                     b.Property<string>("Name")
                         .HasColumnType("text")
@@ -50,7 +50,7 @@ namespace Lingos.Source.Postgres.Migrations
                     b.ToTable("locales");
                 });
 
-            modelBuilder.Entity("Lingos.Common.Scope", b =>
+            modelBuilder.Entity("Lingos.Core.Models.Scope", b =>
                 {
                     b.Property<string>("Name")
                         .HasColumnType("text")
@@ -66,7 +66,7 @@ namespace Lingos.Source.Postgres.Migrations
                     b.ToTable("scopes");
                 });
 
-            modelBuilder.Entity("Lingos.Common.Translation", b =>
+            modelBuilder.Entity("Lingos.Core.Models.Translation", b =>
                 {
                     b.Property<string>("KeyName")
                         .HasColumnType("text")
@@ -103,23 +103,23 @@ namespace Lingos.Source.Postgres.Migrations
                     b.ToTable("translations");
                 });
 
-            modelBuilder.Entity("Lingos.Common.Translation", b =>
+            modelBuilder.Entity("Lingos.Core.Models.Translation", b =>
                 {
-                    b.HasOne("Lingos.Common.Key", "Key")
+                    b.HasOne("Lingos.Core.Models.Key", "Key")
                         .WithMany()
                         .HasForeignKey("KeyName")
                         .HasConstraintName("fk_translations_keys_key_name")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Lingos.Common.Locale", "Locale")
+                    b.HasOne("Lingos.Core.Models.Locale", "Locale")
                         .WithMany()
                         .HasForeignKey("LocaleName")
                         .HasConstraintName("fk_translations_locales_locale_name")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Lingos.Common.Scope", "Scope")
+                    b.HasOne("Lingos.Core.Models.Scope", "Scope")
                         .WithMany()
                         .HasForeignKey("ScopeName")
                         .HasConstraintName("fk_translations_scopes_scope_name")

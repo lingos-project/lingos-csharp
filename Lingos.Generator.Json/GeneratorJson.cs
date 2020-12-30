@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using Lingos.Core.Utilities;
 using Lingos.Core;
+using Lingos.Core.Extensions;
 using Lingos.Core.Models;
+using Lingos.Generator.Json.Extensions;
 
 namespace Lingos.Generator.Json
 {
@@ -16,15 +18,18 @@ namespace Lingos.Generator.Json
             _source = source;
             _config = config;
         }
-
+        
         public void Generate()
         {
             IEnumerable<Translation> translations = _source.GetTranslations();
+            Dictionary<string, object> cfg = _config.Plugins["generatorJson"];
+            string outputFile = cfg.GetString("output");
             
-            foreach (Translation translation in translations)
-            {
-                Console.WriteLine($"{translation.Key} : {translation.Text}");
-            }
+            Dictionary<string, object> rootFormat = cfg.Get<Dictionary<object, object>>("format").DeepCast<object>();
+            (IEnumerable<TranslationValueType> grouping, Dictionary<string, object> typing, IEnumerable<TranslationValueType> wantedTranslationValues) = rootFormat.GetFormatData();
+            Dictionary<string, IEnumerable<Translation>> zz = translations.GroupedBy(grouping);
+            
+            Console.WriteLine("test");
         }
     }
 }
