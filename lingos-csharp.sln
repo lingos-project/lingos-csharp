@@ -3,13 +3,15 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.26124.0
 MinimumVisualStudioVersion = 15.0.26124.0
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lingos.Client.CLI", "Lingos.Client.CLI\Lingos.Client.CLI.csproj", "{A1A64050-58B7-4CC8-8C7F-14C9A61E8100}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lingos.Client.CLI", "src\Lingos.Client.CLI\Lingos.Client.CLI.csproj", "{A1A64050-58B7-4CC8-8C7F-14C9A61E8100}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lingos.Source.Postgres", "Lingos.Source.Postgres\Lingos.Source.Postgres.csproj", "{7FDB6C03-1EC0-491B-A6D6-F17A5D406193}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lingos.Source.Postgres", "src\Lingos.Source.Postgres\Lingos.Source.Postgres.csproj", "{7FDB6C03-1EC0-491B-A6D6-F17A5D406193}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lingos.Core", "Lingos.Core\Lingos.Core.csproj", "{1D7AD70D-9673-4F55-BF5C-43FD08A98A9A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lingos.Core", "src\Lingos.Core\Lingos.Core.csproj", "{1D7AD70D-9673-4F55-BF5C-43FD08A98A9A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lingos.Generator.Json", "Lingos.Generator.Json\Lingos.Generator.Json.csproj", "{6C558FF9-C456-4475-AB12-84C147B9F09A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lingos.Generator.Json", "src\Lingos.Generator.Json\Lingos.Generator.Json.csproj", "{6C558FF9-C456-4475-AB12-84C147B9F09A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lingos.Generator.Json.Test", "tests\Lingos.Generator.Json.Test\Lingos.Generator.Json.Test.csproj", "{F74BC96B-724B-4D22-A8FC-E9E7F94AAEE4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -72,5 +74,17 @@ Global
 		{6C558FF9-C456-4475-AB12-84C147B9F09A}.Release|x64.Build.0 = Release|Any CPU
 		{6C558FF9-C456-4475-AB12-84C147B9F09A}.Release|x86.ActiveCfg = Release|Any CPU
 		{6C558FF9-C456-4475-AB12-84C147B9F09A}.Release|x86.Build.0 = Release|Any CPU
+		{F74BC96B-724B-4D22-A8FC-E9E7F94AAEE4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F74BC96B-724B-4D22-A8FC-E9E7F94AAEE4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F74BC96B-724B-4D22-A8FC-E9E7F94AAEE4}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{F74BC96B-724B-4D22-A8FC-E9E7F94AAEE4}.Debug|x64.Build.0 = Debug|Any CPU
+		{F74BC96B-724B-4D22-A8FC-E9E7F94AAEE4}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{F74BC96B-724B-4D22-A8FC-E9E7F94AAEE4}.Debug|x86.Build.0 = Debug|Any CPU
+		{F74BC96B-724B-4D22-A8FC-E9E7F94AAEE4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F74BC96B-724B-4D22-A8FC-E9E7F94AAEE4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F74BC96B-724B-4D22-A8FC-E9E7F94AAEE4}.Release|x64.ActiveCfg = Release|Any CPU
+		{F74BC96B-724B-4D22-A8FC-E9E7F94AAEE4}.Release|x64.Build.0 = Release|Any CPU
+		{F74BC96B-724B-4D22-A8FC-E9E7F94AAEE4}.Release|x86.ActiveCfg = Release|Any CPU
+		{F74BC96B-724B-4D22-A8FC-E9E7F94AAEE4}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

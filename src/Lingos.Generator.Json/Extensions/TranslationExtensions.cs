@@ -54,6 +54,12 @@ namespace Lingos.Generator.Json.Extensions
             };
         }
 
+        /// <summary>
+        /// Groups by a translation value type, then returns the grouped translations
+        /// </summary>
+        /// <param name="translations">List of translations to be grouped</param>
+        /// <param name="groupBy">Groups the translations with these values</param>
+        /// <returns>A dictionary of translations grouped by values</returns>
         internal static Dictionary<string, IEnumerable<Translation>> GroupedBy(
             this IEnumerable<Translation> translations,
             IEnumerable<TranslationValueType> groupBy)

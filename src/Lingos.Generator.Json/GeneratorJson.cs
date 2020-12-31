@@ -5,6 +5,8 @@ using Lingos.Core;
 using Lingos.Core.Extensions;
 using Lingos.Core.Models;
 using Lingos.Generator.Json.Extensions;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 
 namespace Lingos.Generator.Json
 {
@@ -23,13 +25,18 @@ namespace Lingos.Generator.Json
         {
             IEnumerable<Translation> translations = _source.GetTranslations();
             Dictionary<string, object> cfg = _config.Plugins["generatorJson"];
+            ResultEnding endsIn = Enum.Parse<ResultEnding>(cfg.GetString("ends", "default"), true);
             string outputFile = cfg.GetString("output");
             
             Dictionary<string, object> rootFormat = cfg.Get<Dictionary<object, object>>("format").DeepCast<object>();
-            (IEnumerable<TranslationValueType> grouping, Dictionary<string, object> typing, IEnumerable<TranslationValueType> wantedTranslationValues) = rootFormat.GetFormatData();
-            Dictionary<string, IEnumerable<Translation>> zz = translations.GroupedBy(grouping);
+            Dictionary<string, object> result = rootFormat.FormatTranslations(translations, endsIn);
+
+            string resultText = JsonConvert.SerializeObject(result, new JsonSerializerSettings
+            {
+                ContractResolver = new CamelCasePropertyNamesContractResolver()
+            });
             
-            Console.WriteLine("test");
+            System.IO.File.WriteAllText(outputFile, resultText);
         }
     }
 }
