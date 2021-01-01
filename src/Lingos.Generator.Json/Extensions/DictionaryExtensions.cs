@@ -1,7 +1,5 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using Lingos.Core.Models;
@@ -11,72 +9,46 @@ namespace Lingos.Generator.Json.Extensions
 {
     public static class DictionaryExtension
     {
+        internal static (IEnumerable<IEnumerable<TranslationValueType>>, IEnumerable<TranslationValueType>) GetWantedFormat(
+            this Dictionary<string, object> cfgFormat)
+        {
+            List<IEnumerable<TranslationValueType>> grouping = new();
+            Dictionary<string, object> current = cfgFormat;
+
+            while (true)
+            {
+                IEnumerable<TranslationValueType> groupingTypes =
+                    current.Keys.Select(key => Enum.Parse<TranslationValueType>(key, true)).ToList();
+                grouping.Add(groupingTypes);
+                
+                object data = groupingTypes.Count() > 1 ? current.Last().Value : current.First().Value;
+
+                switch (data)
+                {
+                    case Dictionary<object, object> nextFormat:
+                        current = nextFormat.DeepCast<object>();
+                        break;
+                    case IEnumerable<object> resultValues:
+                        IEnumerable<TranslationValueType> wantedValues =
+                            resultValues.Cast<string>()
+                                .Select(key => Enum.Parse<TranslationValueType>(key, true))
+                                .ToList();
+                        return (grouping, wantedValues);
+                    default:
+                        throw new ArgumentOutOfRangeException(nameof(cfgFormat), cfgFormat, "Wrong value format for config");
+                }
+            }
+        }
+        
         internal static Dictionary<string, object> FormatTranslations(
-            this Dictionary<string, object> wantedFormat,
+            this Dictionary<string, object> cfgFormat,
             IEnumerable<Translation> translations,
             ResultEnding endsIn)
         {
-            Dictionary<string, object> result = new();
-            
-            (IEnumerable<TranslationValueType> grouping, Dictionary<string, object> nextRootFormat, IEnumerable<TranslationValueType> wantedTranslationValues) = wantedFormat.GetFormatData();
-            Dictionary<string, IEnumerable<Translation>> translationGroups = translations.GroupedBy(grouping);
-
-            if (nextRootFormat != null)
-            {
-                foreach ((string groupValue, IEnumerable<Translation> groupedTranslations) in translationGroups)
-                {
-                    result[groupValue] = nextRootFormat.FormatTranslations(groupedTranslations, endsIn);
-                }
-            }
-            else if (wantedTranslationValues != null)
-            {
-                IEnumerable<TranslationValueType> wantedTranslationValuesList = wantedTranslationValues.ToList();
-                foreach ((string groupValue, IEnumerable<Translation> groupedTranslations) in translationGroups)
-                {
-                    (IEnumerable<ResultTranslation> resultTranslations, IEnumerable<string> resultTranslationsValues) = groupedTranslations.GetResult(wantedTranslationValuesList);
-                    dynamic resultValues = (IEnumerable) resultTranslations ?? resultTranslationsValues;
-
-                    if (endsIn == ResultEnding.Default || endsIn == ResultEnding.Single)
-                    {
-                        if (Enumerable.Count(resultValues) > 1)
-                        {
-                            throw new InvalidDataException(
-                                "Format configuration does not return single results, fix the format or change ending to 'multiple'.");
-                        }
-
-                        result[groupValue] = ((IEnumerable<object>) resultValues).First();
-                    }
-                    else
-                    {
-                        result[groupValue] = resultValues;
-                    }
-                }
-            }
-
-            return result;
+            (IEnumerable<IEnumerable<TranslationValueType>> groupings, IEnumerable<TranslationValueType> wantedValues) = cfgFormat.GetWantedFormat();
+            return translations.FormatTranslationBatch(groupings.ToList(), wantedValues, endsIn);
         }
         
-        internal static (IEnumerable<TranslationValueType>, Dictionary<string, object>, IEnumerable<TranslationValueType>) GetFormatData(this Dictionary<string, object> dict)
-        {
-            IEnumerable<TranslationValueType> translationValueTypes = dict.Select(kv => Enum.Parse<TranslationValueType>(kv.Key, true)).ToList();
-            
-            if (!translationValueTypes.Any())
-            {
-                throw new ArgumentOutOfRangeException(nameof(dict), dict, "Wrong key format for config");
-            }
-
-            object data = translationValueTypes.Count() > 1 ? dict.Last().Value : dict.First().Value; 
-            return data switch
-            {
-                Dictionary<object, object> resultDict => (translationValueTypes, resultDict.DeepCast<object>(), null),
-                IEnumerable<object> resultValues => (translationValueTypes, null, resultValues.Select(v => Enum.Parse<TranslationValueType>((string) v, true))),
-                _ => throw new ArgumentOutOfRangeException(nameof(dict), dict, "Wrong value format for config")
-            };
-        }
-
-        internal static Dictionary<string, Dictionary<object, object>> DeepCast(this Dictionary<object, object> dict) =>
-            dict.DeepCast<Dictionary<object, object>>();
-
         internal static Dictionary<string, T> DeepCast<T>(this Dictionary<object, object> dict) =>
             dict.DeepCast<string, T>();
         

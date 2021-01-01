@@ -1,5 +1,8 @@
+using System.Diagnostics.CodeAnalysis;
+
 namespace Lingos.Generator.Json
 {
+    [ExcludeFromCodeCoverage]
     public class ResultTranslation
     {
         public string Key { get; set; }

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using Lingos.Core.Models;
 
@@ -7,7 +8,42 @@ namespace Lingos.Generator.Json.Extensions
 {
     internal static class TranslationExtensions
     {
-        internal static (IEnumerable<ResultTranslation>, IEnumerable<string>) GetResult(
+        internal static Dictionary<string, object> FormatTranslationBatch(
+            this IEnumerable<Translation> translationBatch,
+            List<IEnumerable<TranslationValueType>> groupings,
+            IEnumerable<TranslationValueType> wantedValues,
+            ResultEnding endsIn,
+            int depth = 0)
+        {
+            if (depth < groupings.Count - 1)
+            {
+                return translationBatch.GroupedBy(groupings[depth]).ToDictionary(
+                    kv => kv.Key,
+                    kv => (object) kv.Value.FormatTranslationBatch(groupings, wantedValues, endsIn, depth + 1));
+            }
+
+            return translationBatch.GroupedBy(groupings.Last()).ToDictionary(
+                kv => kv.Key,
+                kv =>
+                {
+                    dynamic resultValues = kv.Value.GetResult(wantedValues);
+
+                    if (endsIn == ResultEnding.Multiple)
+                    {
+                        return resultValues;
+                    }
+                    
+                    if (Enumerable.Count(resultValues) > 1)
+                    {
+                        throw new InvalidDataException(
+                            "Format configuration does not return single results, fix the format or change ending to 'multiple'.");
+                    }
+                    
+                    return ((IEnumerable<object>) resultValues).First();
+                });
+        }
+        
+        internal static dynamic GetResult(
             this IEnumerable<Translation> translations, IEnumerable<TranslationValueType> wantedValues)
         {
             List<TranslationValueType> wantedValuesList = wantedValues.ToList();
@@ -20,10 +56,10 @@ namespace Lingos.Generator.Json.Extensions
 
             if (wantedValuesList.Count == 1)
             {
-                return (null, translations.Select(t => t.GetValue(wantedValuesList.Single())));
+                return translations.Select(t => t.GetValue(wantedValuesList.Single()));
             }
             
-            return (translations.Select(t => t.CreateResultTranslation(wantedValuesList)), null);
+            return translations.Select(t => t.CreateResultTranslation(wantedValuesList));
         }
 
         internal static ResultTranslation CreateResultTranslation(this Translation translation,
