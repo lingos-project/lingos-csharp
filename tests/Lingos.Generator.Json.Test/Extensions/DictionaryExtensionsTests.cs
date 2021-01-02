@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using System.IO;
 using Lingos.Core.Models;
 using Lingos.Generator.Json.Extensions;
 using Xunit;
@@ -48,7 +49,7 @@ namespace Lingos.Generator.Json.Test.Extensions
             };
             
             // act
-            (IEnumerable<IEnumerable<TranslationValueType>> actualGrouping, IEnumerable<TranslationValueType> actualValues) = format.GetWantedFormat();
+            (IEnumerable<IEnumerable<TranslationValueType>> actualGrouping, IEnumerable<TranslationValueType> actualValues) = format.Parse();
             
             // assert
             Assert.Equal(expectedWantedGrouping, actualGrouping);
@@ -79,7 +80,7 @@ namespace Lingos.Generator.Json.Test.Extensions
             };
             
             // act and assert
-            ArgumentException exception = Assert.Throws<ArgumentException>(() => format.GetWantedFormat());
+            ArgumentException exception = Assert.Throws<ArgumentException>(() => format.Parse());
             Assert.Contains("non existent", exception.Message);
         }
 
@@ -104,7 +105,7 @@ namespace Lingos.Generator.Json.Test.Extensions
             };
             
             // act and assert
-            ArgumentException exception = Assert.Throws<ArgumentException>(() => format.GetWantedFormat());
+            ArgumentException exception = Assert.Throws<ArgumentException>(() => format.Parse());
             Assert.Contains("wrong", exception.Message);
         }
         
@@ -129,10 +130,11 @@ namespace Lingos.Generator.Json.Test.Extensions
             };
             
             // act and assert
-            Assert.Throws<ArgumentOutOfRangeException>(() => format.GetWantedFormat());
+            Assert.Throws<ArgumentOutOfRangeException>(() => format.Parse());
         }
         
         [Fact (Skip = "Not done")]
+        // [Fact]
         public void FormatTranslations_ReturnsCorrectly()
         {
             // arrange
@@ -223,6 +225,38 @@ namespace Lingos.Generator.Json.Test.Extensions
             
             // assert
             // Assert.Equal(expected, result, new StringObjectDictionaryEqualityComparer());
+        }
+
+        [Fact]
+        public void InsertTranslation_WrongEnd_ThrowException()
+        {
+            // arrange
+            IEnumerable<IEnumerable<TranslationValueType>> groupings = new[]
+            {
+                new[] {TranslationValueType.Scope},
+                new[] {TranslationValueType.Key, TranslationValueType.Variant},
+            };
+            IEnumerable<TranslationValueType> wantedValueTypes = new[] {TranslationValueType.Text};
+            IEnumerable<Translation> translations = new[]
+            {
+                new Translation {KeyName = "k1", LocaleName = "l1", ScopeName = "s1", Variant = "v1", Text = "text"},
+                new Translation {KeyName = "k1", LocaleName = "l1", ScopeName = "s1", Variant = "none", Text = "text"},
+                new Translation {KeyName = "k1", LocaleName = "l2", ScopeName = "s1", Variant = "v1", Text = "text"},
+                new Translation {KeyName = "k1", LocaleName = "l2", ScopeName = "s1", Variant = "none", Text = "text"},
+            };
+            Dictionary<string, object> dictionary = new();
+            
+            
+            // act
+
+            Assert.Throws<InvalidDataException>(() =>
+            {
+                foreach (Translation translation in translations)
+                {
+                    dictionary.InsertTranslation(translation, groupings, wantedValueTypes, ResultEnding.Default);
+                }
+            });
+            // assert
         }
     }
 }
