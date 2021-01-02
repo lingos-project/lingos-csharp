@@ -49,8 +49,7 @@ namespace Lingos.Generator.Json.Extensions
                 TranslationValueType.Locale => translation.LocaleName,
                 TranslationValueType.Scope => translation.ScopeName,
                 TranslationValueType.Variant => translation.Variant,
-                TranslationValueType.Text => translation.Text,
-                _ => throw new ArgumentOutOfRangeException(nameof(valueType), valueType, null)
+                _ => translation.Text,
             };
         }
         

@@ -4,6 +4,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using Lingos.Core.Models;
 using Lingos.Generator.Json.Extensions;
+using Lingos.Generator.Json.Test.Utilities;
 using Xunit;
 
 namespace Lingos.Generator.Json.Test.Extensions
@@ -133,9 +134,8 @@ namespace Lingos.Generator.Json.Test.Extensions
             Assert.Throws<ArgumentOutOfRangeException>(() => format.Parse());
         }
         
-        [Fact (Skip = "Not done")]
-        // [Fact]
-        public void FormatTranslations_ReturnsCorrectly()
+        [Fact]
+        public void FormatTranslations_WithSingleEndingAndMultipleValues_ReturnsCorrectly()
         {
             // arrange
             Dictionary<string, object> format = new()
@@ -169,52 +169,40 @@ namespace Lingos.Generator.Json.Test.Extensions
                 {
                     ["l1"] = new Dictionary<string, object>
                     {
-                        ["k1-v1"] = new ResultTranslation[]
+                        ["k1-v1"] = new ResultTranslation
                         {
-                            new()
-                            {
-                                Key = "k1",
-                                Locale = "l1",
-                                Scope = "s1",
-                                Variant = "v1",
-                                Text = "text"
-                            }
+                            Key = "k1",
+                            Locale = "l1",
+                            Scope = "s1",
+                            Variant = "v1",
+                            Text = "text"
                         },
-                        ["k1-none"] = new ResultTranslation[]
+                        ["k1-none"] = new ResultTranslation
                         {
-                            new ()
-                            {
-                                Key = "k1",
-                                Locale = "l1",
-                                Scope = "s1",
-                                Variant = "none",
-                                Text = "text"
-                            }
+                            Key = "k1",
+                            Locale = "l1",
+                            Scope = "s1",
+                            Variant = "none",
+                            Text = "text"
                         }
                     },
                     ["l2"] = new Dictionary<string, object>
                     {
-                        ["k1-v1"] = new ResultTranslation[]
+                        ["k1-v1"] = new ResultTranslation
                         {
-                            new()
-                            {
-                                Key = "k1",
-                                Locale = "l1",
-                                Scope = "s1",
-                                Variant = "v1",
-                                Text = "text"
-                            }
+                            Key = "k1",
+                            Locale = "l2",
+                            Scope = "s1",
+                            Variant = "v1",
+                            Text = "text"
                         },
-                        ["k1-none"] = new ResultTranslation[]
+                        ["k1-none"] = new ResultTranslation
                         {
-                            new ()
-                            {
-                                Key = "k1",
-                                Locale = "l1",
-                                Scope = "s1",
-                                Variant = "none",
-                                Text = "text"
-                            }
+                            Key = "k1",
+                            Locale = "l2",
+                            Scope = "s1",
+                            Variant = "none",
+                            Text = "text"
                         }
                     }
                 }
@@ -224,7 +212,110 @@ namespace Lingos.Generator.Json.Test.Extensions
             Dictionary<string, object> result = format.FormatTranslations(translations, ResultEnding.Default);
             
             // assert
-            // Assert.Equal(expected, result, new StringObjectDictionaryEqualityComparer());
+            Assert.Equal(expected, result, new StringObjectDictionaryEqualityComparer());
+        }
+        
+        [Fact]
+        public void FormatTranslations_WithMultipleEndingAndMultipleValues_ReturnsCorrectly()
+        {
+            // arrange
+            Dictionary<string, object> format = new()
+            {
+                ["scope"] = new Dictionary<object, object>
+                {
+                    ["locale"] = new[]
+                    {
+                        "key",
+                        "locale",
+                        "scope",
+                        "variant",
+                        "text"
+                    }
+                }
+            };
+            IEnumerable<Translation> translations = new[]
+            {
+                new Translation {KeyName = "k1", LocaleName = "l1", ScopeName = "s1", Variant = "v1", Text = "text"},
+                new Translation {KeyName = "k1", LocaleName = "l1", ScopeName = "s1", Variant = "none", Text = "text"},
+                new Translation {KeyName = "k1", LocaleName = "l2", ScopeName = "s1", Variant = "v1", Text = "text"},
+                new Translation {KeyName = "k1", LocaleName = "l2", ScopeName = "s1", Variant = "none", Text = "text"},
+            };
+            Dictionary<string, object> expected = new()
+            {
+                ["s1"] = new Dictionary<string, object>
+                {
+                    ["l1"] = new ResultTranslation[]
+                    {
+                        new()
+                        {
+                            Key = "k1",
+                            Locale = "l1",
+                            Scope = "s1",
+                            Variant = "v1",
+                            Text = "text"
+                        },
+                        new()
+                        {
+                            Key = "k1",
+                            Locale = "l1",
+                            Scope = "s1",
+                            Variant = "none",
+                            Text = "text"
+                        }
+                    },
+                    ["l2"] = new ResultTranslation[]
+                    {
+                        new()
+                        {
+                            Key = "k1",
+                            Locale = "l2",
+                            Scope = "s1",
+                            Variant = "v1",
+                            Text = "text"
+                        },
+                        new()
+                        {
+                            Key = "k1",
+                            Locale = "l2",
+                            Scope = "s1",
+                            Variant = "none",
+                            Text = "text"
+                        }
+                    }
+                }
+            };
+            
+            // act
+            Dictionary<string, object> result = format.FormatTranslations(translations, ResultEnding.Multiple);
+            
+            // assert
+            Assert.Equal(expected, result, new StringObjectDictionaryEqualityComparer());
+        }
+        
+        [Fact]
+        public void FormatTranslations_WithEmptyWantedValues_ThrowsException()
+        {
+            // arrange
+            Dictionary<string, object> format = new()
+            {
+                ["scope"] = new Dictionary<object, object>
+                {
+                    ["locale"] = new Dictionary<object, object>
+                    {
+                        ["key"] = Array.Empty<object>(),
+                    }
+                }
+            };
+            IEnumerable<Translation> translations = new[]
+            {
+                new Translation {KeyName = "k1", LocaleName = "l1", ScopeName = "s1", Variant = "v1", Text = "text"},
+                new Translation {KeyName = "k1", LocaleName = "l1", ScopeName = "s1", Variant = "none", Text = "text"},
+                new Translation {KeyName = "k1", LocaleName = "l2", ScopeName = "s1", Variant = "v1", Text = "text"},
+                new Translation {KeyName = "k1", LocaleName = "l2", ScopeName = "s1", Variant = "none", Text = "text"},
+            };
+            
+            // act & assert
+            Assert.Throws<ArgumentOutOfRangeException>(() => format.FormatTranslations(translations, ResultEnding.Default));
         }
 
         [Fact]
@@ -247,8 +338,7 @@ namespace Lingos.Generator.Json.Test.Extensions
             Dictionary<string, object> dictionary = new();
             
             
-            // act
-
+            // act & assert
             Assert.Throws<InvalidDataException>(() =>
             {
                 foreach (Translation translation in translations)
@@ -256,7 +346,6 @@ namespace Lingos.Generator.Json.Test.Extensions
                     dictionary.InsertTranslation(translation, groupings, wantedValueTypes, ResultEnding.Default);
                 }
             });
-            // assert
         }
     }
 }

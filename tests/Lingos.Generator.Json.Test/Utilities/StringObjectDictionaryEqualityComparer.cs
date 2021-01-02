@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Newtonsoft.Json;
 
 namespace Lingos.Generator.Json.Test.Utilities
 {
@@ -15,12 +16,27 @@ namespace Lingos.Generator.Json.Test.Utilities
             {
                 return false;
             }
+
+            if (dict1.Keys.Count != dict2.Keys.Count)
+            {
+                return false;
+            }
             
             foreach ((string key, object value) in dict1)
             {
-                bool containsKey = dict2.ContainsKey(key);
-                
-                if (!containsKey || !value.Equals(dict2[key]))
+                if (!dict2.ContainsKey(key))
+                {
+                    return false;
+                }
+
+                if (value is Dictionary<string, object> nestedDict1 && dict2[key] is Dictionary<string, object> nestedDict2)
+                {
+                    if (!Equals(nestedDict1, nestedDict2))
+                    {
+                        return false;
+                    }
+                }
+                else if (JsonConvert.SerializeObject(value) != JsonConvert.SerializeObject(dict2[key]))
                 {
                     return false;
                 }
