@@ -3,6 +3,7 @@
     <PropertyGroup>
         <TargetFramework>net5.0</TargetFramework>
         <RootNamespace>Lingos.Source.Postgres</RootNamespace>
+        <SelfContained>true</SelfContained>
     </PropertyGroup>
 
     <ItemGroup>
