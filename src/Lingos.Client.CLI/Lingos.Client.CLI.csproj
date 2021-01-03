@@ -1,24 +1,29 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <OutputType>Exe</OutputType>
-    <TargetFramework>net5</TargetFramework>
-    <RootNamespace>Lingos.Client.CLI</RootNamespace>
-    <RuntimeIdentifier>linux-x64</RuntimeIdentifier>
-    <RuntimeIdentifiers>win-x64;linux-x64;osx-x64</RuntimeIdentifiers>
-    <PublishSingleFile>true</PublishSingleFile>
-    <PublishTrimmed>true</PublishTrimmed>
-    <SelfContained>true</SelfContained>
-    <InvariantGlobalization>true</InvariantGlobalization>
-  </PropertyGroup>
+    <PropertyGroup>
+        <OutputType>Exe</OutputType>
+        <TargetFramework>net5</TargetFramework>
+        <RootNamespace>Lingos.Client.CLI</RootNamespace>
+        <RuntimeIdentifier>linux-x64</RuntimeIdentifier>
+        <RuntimeIdentifiers>win-x64;linux-x64;osx-x64</RuntimeIdentifiers>
+        <PublishSingleFile>true</PublishSingleFile>
+        <PublishTrimmed>true</PublishTrimmed>
+        <SelfContained>true</SelfContained>
+        <InvariantGlobalization>true</InvariantGlobalization>
+    </PropertyGroup>
+    
+    <PropertyGroup Condition="'$(Configuration)' == 'Release'">
+        <DebugType>None</DebugType>
+        <DebugSymbols>false</DebugSymbols>
+    </PropertyGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\Lingos.Core\Lingos.Core.csproj" />
-  </ItemGroup>
+    <ItemGroup>
+        <ProjectReference Include="..\Lingos.Core\Lingos.Core.csproj" />
+    </ItemGroup>
 
-  <ItemGroup>
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="5.0.1" />
-    <PackageReference Include="System.CommandLine" Version="2.0.0-beta1.20574.7" />
-  </ItemGroup>
+    <ItemGroup>
+        <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="5.0.1" />
+        <PackageReference Include="System.CommandLine" Version="2.0.0-beta1.20574.7" />
+    </ItemGroup>
 
 </Project>
