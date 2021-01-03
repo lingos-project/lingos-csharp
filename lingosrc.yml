@@ -1,6 +1,6 @@
-source: "Lingos.Source.Postgres/bin/Debug/net5.0/Lingos.Source.Postgres.dll"
+source: "src/Lingos.Source.Postgres/bin/Debug/net5.0/Lingos.Source.Postgres.dll"
 generators:
-  - "Lingos.Generator.Json/bin/Debug/net5.0/Lingos.Generator.Json.dll"
+  - "src/Lingos.Generator.Json/bin/Debug/net5.0/Lingos.Generator.Json.dll"
 plugins:
   sourcePostgres:
     user: "user"
