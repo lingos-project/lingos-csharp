@@ -30,7 +30,7 @@ namespace Lingos.Generator.Json
             
             Dictionary<string, object> rootFormat = cfg.Get<Dictionary<object, object>>("format").DeepCast<object>();
             Dictionary<string, object> result = rootFormat.FormatTranslations(translations, endsIn);
-
+            
             string resultText = JsonConvert.SerializeObject(result, new JsonSerializerSettings
             {
                 ContractResolver = new CamelCasePropertyNamesContractResolver()
