@@ -44,6 +44,7 @@ namespace Lingos.Source.Postgres
                 entity.HasOne(t => t.Key);
                 entity.HasOne(t => t.Locale);
                 entity.HasOne(t => t.Scope);
+                entity.Property(t => t.Text).IsRequired();
                 entity.Property(t => t.Variant).HasDefaultValue("none");
             });
             modelBuilder.Entity<Key>(entity =>
