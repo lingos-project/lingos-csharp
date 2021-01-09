@@ -2,10 +2,8 @@ name: Create release and upload artifacts
 
 on:
   push:
-    branches:
-      - main
     tags:
-      - '*'
+      - 'v*'
 
 jobs:
   build:
