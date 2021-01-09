@@ -2,8 +2,8 @@
 
     <PropertyGroup>
         <TargetFramework>net5.0</TargetFramework>
-
         <IsPackable>false</IsPackable>
+        <IsPublishable>false</IsPublishable>
     </PropertyGroup>
 
     <ItemGroup>
@@ -21,7 +21,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\..\src\Lingos.Generator.Json\Lingos.Generator.Json.csproj" />
+        <ProjectReference Include="..\..\src\Lingos.Generator.Json\Lingos.Generator.Json.csproj" />
     </ItemGroup>
 
 </Project>

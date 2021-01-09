@@ -1,0 +1,14 @@
+<Project>
+
+    <Target Name="PublishAssets" AfterTargets="Publish">
+        <ConvertToAbsolutePath Paths="$(PublishingDir)\$(MSBuildProjectName)">
+            <Output TaskParameter="AbsolutePaths" PropertyName="PublishOutputPath" />
+        </ConvertToAbsolutePath>
+        <ItemGroup>
+            <_PublishAssets Include="$(OutDir)\publish\**\*.*" />
+        </ItemGroup>
+        <Message Importance="high" Text="Publishing assets of $(MSBuildProjectName) -> $(PublishOutputPath)" />
+        <Copy SourceFiles="@(_PublishAssets)" DestinationFolder="$(PublishOutputPath)\%(RecursiveDir)" SkipUnchangedFiles="true" />
+    </Target>
+
+</Project>

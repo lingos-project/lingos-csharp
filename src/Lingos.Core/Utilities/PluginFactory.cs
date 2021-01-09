@@ -7,18 +7,17 @@ namespace Lingos.Core.Utilities
 {
     public static class PluginFactory
     {
-        internal static Assembly LoadPlugin(string relativePath)
+        internal static Assembly LoadPlugin(string pluginPath)
         {
-            string root = Path.GetFullPath(
-                Path.Combine(
-                    Path.GetDirectoryName(
-                        Path.GetDirectoryName(
-                            Path.GetDirectoryName(
-                                Path.GetDirectoryName(
-                                    Path.GetDirectoryName(typeof(PluginFactory).Assembly.Location))))) ?? string.Empty));
-
-            string pluginLocation =
-                Path.GetFullPath(Path.Combine(root, relativePath.Replace('\\', Path.DirectorySeparatorChar)));
+            if (string.IsNullOrEmpty(pluginPath))
+            {
+                throw new ArgumentOutOfRangeException(nameof(pluginPath), pluginPath,
+                    "The path of the plugin should not be empty or null");
+            }
+            
+            string pluginLocation = Path.IsPathRooted(pluginPath)
+                ? pluginPath
+                : Path.GetFullPath(Path.Combine(Directory.GetCurrentDirectory(), pluginPath.Replace('\\', Path.DirectorySeparatorChar)));
             PluginLoadContext loadContext = new(pluginLocation);
             return loadContext.LoadFromAssemblyName(new AssemblyName(Path.GetFileNameWithoutExtension(pluginLocation)));
         }

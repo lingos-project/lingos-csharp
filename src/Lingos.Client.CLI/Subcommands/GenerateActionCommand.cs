@@ -9,7 +9,7 @@ namespace Lingos.Client.CLI.Subcommands
 {
     internal class GenerateActionCommand : ActionCommand
     {
-        internal GenerateActionCommand() : base("generate", "Initializes the sources")
+        internal GenerateActionCommand() : base("generate", "Generates an output")
         {
             Handler = CommandHandler.Create<string>(Generate);
         }

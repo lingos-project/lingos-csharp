@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using Lingos.Core;
 using Lingos.Core.Extensions;
 using Lingos.Core.Models;
 using Lingos.Core.Utilities;
@@ -42,7 +41,23 @@ namespace Lingos.Source.Postgres
             modelBuilder.Entity<Translation>(entity =>
             {
                 entity.HasKey(t => new {t.KeyName, t.ScopeName, t.LocaleName, t.Variant});
+                entity.HasOne(t => t.Key);
+                entity.HasOne(t => t.Locale);
+                entity.HasOne(t => t.Scope);
+                entity.Property(t => t.Text).IsRequired();
                 entity.Property(t => t.Variant).HasDefaultValue("none");
+            });
+            modelBuilder.Entity<Key>(entity =>
+            {
+                entity.HasKey(k => k.Name);
+            });
+            modelBuilder.Entity<Locale>(entity =>
+            {
+                entity.HasKey(l => l.Name);
+            });
+            modelBuilder.Entity<Scope>(entity =>
+            {
+                entity.HasKey(s => s.Name);
             });
         }
     }
