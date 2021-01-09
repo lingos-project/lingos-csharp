@@ -1,11 +1,13 @@
 <Project Sdk="Microsoft.NET.Sdk">
+    
+    <Import Project="$(MSBuildThisFileDirectory)..\..\publish.targets" />
 
     <PropertyGroup>
         <TargetFramework>net5.0</TargetFramework>
         <RootNamespace>Lingos.Generator.Json</RootNamespace>
     </PropertyGroup>
 
-    <PropertyGroup Condition="'$(Configuration)' == 'Release'">
+    <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|AnyCPU'">
         <DebugType>None</DebugType>
         <DebugSymbols>false</DebugSymbols>
         <PublishTrimmed>true</PublishTrimmed>

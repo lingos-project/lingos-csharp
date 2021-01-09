@@ -1,4 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
+    
+    <Import Project="$(MSBuildThisFileDirectory)..\..\publish.targets" />
 
     <PropertyGroup>
         <OutputType>Exe</OutputType>
@@ -6,7 +8,7 @@
         <RootNamespace>Lingos.Client.CLI</RootNamespace>
     </PropertyGroup>
     
-    <PropertyGroup Condition="'$(Configuration)' == 'Release'">
+    <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|AnyCPU'">
         <AssemblyName>lingos-cli</AssemblyName>
         <DebugType>None</DebugType>
         <DebugSymbols>false</DebugSymbols>

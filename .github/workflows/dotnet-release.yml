@@ -17,6 +17,17 @@ jobs:
         uses: actions/setup-dotnet@v1
         with:
           dotnet-version: 5.0.x
-      - name: Publish for linux
+      - name: Publish assets for linux
         run: |
-          dotnet publish ./lingos-csharp.sln -c Release -r linux-x64
+          dotnet publish -c Release -r linux-x64 -p:PublishingDir=${{ github.workspace }}/dist
+      - name: Zip assets
+        run: |
+          ./scripts/createZipFolders.sh ./dist ./out
+      - name: Upload Assets
+        uses: svenstaro/upload-release-action@v2
+        with:
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          file: ./out/*
+          tag: ${{ github.ref }}
+          overwrite: true
+          file_glob: true
