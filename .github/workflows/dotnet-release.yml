@@ -13,8 +13,8 @@ jobs:
       - uses: actions/checkout@v2
         with:
           fetch-depth: 0
-      - name: Get latest tag
-        id: latesttag
+      - name: Get previous tag
+        id: previoustag
         uses: WyriHaximus/github-action-get-previous-tag@master
       - name: Setup .NET
         uses: actions/setup-dotnet@v1
@@ -22,7 +22,7 @@ jobs:
           dotnet-version: 5.0.x
       - name: Publish assets for linux
         run: |
-          dotnet publish -c Release -r linux-x64 -p:PublishingDir=${{ github.workspace }}/dist -p:AssemblyVersion=${{ steps.latesttag.output.tag }}
+          dotnet publish -c Release -r linux-x64 -p:PublishingDir=${{ github.workspace }}/dist -p:AssemblyVersion=${{ steps.previoustag.outputs.tag }}
       - name: Zip assets
         run: |
           ./scripts/createZipFolders.sh ./dist ./out
@@ -34,5 +34,5 @@ jobs:
           tag: ${{ github.ref }}
           overwrite: true
           file_glob: true
-          prerelease: ${{ contains(steps.latesttag.output.tag, 'alpha') || contains(steps.latesttag.output.tag, 'beta') }}
+          prerelease: ${{ contains(steps.previoustag.outputs.tag, 'alpha') || contains(steps.previoustag.outputs.tag, 'beta') }}
           
