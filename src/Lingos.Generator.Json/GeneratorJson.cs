@@ -1,12 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text.Json;
 using Lingos.Core.Utilities;
 using Lingos.Core;
 using Lingos.Core.Extensions;
 using Lingos.Core.Models;
 using Lingos.Generator.Json.Extensions;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Serialization;
 
 namespace Lingos.Generator.Json
 {
@@ -30,10 +29,10 @@ namespace Lingos.Generator.Json
             
             Dictionary<string, object> rootFormat = cfg.Get<Dictionary<object, object>>("format").DeepCast<object>();
             Dictionary<string, object> result = rootFormat.FormatTranslations(translations, endsIn);
-            
-            string resultText = JsonConvert.SerializeObject(result, new JsonSerializerSettings
+
+            string resultText = JsonSerializer.Serialize(result, new JsonSerializerOptions
             {
-                ContractResolver = new CamelCasePropertyNamesContractResolver()
+                PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
             });
             
             System.IO.File.WriteAllText(outputFile, resultText);
