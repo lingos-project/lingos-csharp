@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-using Newtonsoft.Json;
+using System.Text.Json;
 
 namespace Lingos.Generator.Json.Test.Utilities
 {
@@ -36,7 +36,7 @@ namespace Lingos.Generator.Json.Test.Utilities
                         return false;
                     }
                 }
-                else if (JsonConvert.SerializeObject(value) != JsonConvert.SerializeObject(dict2[key]))
+                else if (JsonSerializer.Serialize(value) != JsonSerializer.Serialize(dict2[key]))
                 {
                     return false;
                 }
