@@ -1,7 +1,7 @@
 <Project>
 
     <Target Name="PublishAssets" AfterTargets="Publish">
-        <ConvertToAbsolutePath Paths="$(PublishingDir)\$(MSBuildProjectName)">
+        <ConvertToAbsolutePath Paths="$(PublishingDir)-$(AssemblyVersion)\$(MSBuildProjectName)">
             <Output TaskParameter="AbsolutePaths" PropertyName="PublishOutputPath" />
         </ConvertToAbsolutePath>
         <ItemGroup>

@@ -3,7 +3,8 @@ name: Create release and upload artifacts
 on:
   push:
     tags:
-      - 'v*'
+      - '*'
+      - 'pre*-*'
 
 jobs:
   build:
@@ -17,7 +18,7 @@ jobs:
           dotnet-version: 5.0.x
       - name: Publish assets for linux
         run: |
-          dotnet publish -c Release -r linux-x64 -p:PublishingDir=${{ github.workspace }}/dist
+          dotnet publish -c Release -r linux-x64 -p:PublishingDir=${{ github.workspace }}/dist -p:AssemblyVersion=${{ github.event.release.tag_name }}
       - name: Zip assets
         run: |
           ./scripts/createZipFolders.sh ./dist ./out
@@ -29,3 +30,4 @@ jobs:
           tag: ${{ github.ref }}
           overwrite: true
           file_glob: true
+          prerelease: ${{ startsWith(github.event.release.tag_name, 'pre') }}
