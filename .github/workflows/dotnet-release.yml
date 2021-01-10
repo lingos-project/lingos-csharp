@@ -3,22 +3,26 @@ name: Create release and upload artifacts
 on:
   push:
     tags:
-      - '*'
-      - 'pre*-*'
+      - 'v*'
 
 jobs:
-  build:
+  release:
     runs-on: ubuntu-latest
 
     steps:
       - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - name: Get latest tag
+        id: latesttag
+        uses: WyriHaximus/github-action-get-previous-tag@master
       - name: Setup .NET
         uses: actions/setup-dotnet@v1
         with:
           dotnet-version: 5.0.x
       - name: Publish assets for linux
         run: |
-          dotnet publish -c Release -r linux-x64 -p:PublishingDir=${{ github.workspace }}/dist -p:AssemblyVersion=${{ github.event.release.tag_name }}
+          dotnet publish -c Release -r linux-x64 -p:PublishingDir=${{ github.workspace }}/dist -p:AssemblyVersion=${{ steps.latesttag.output.tag }}
       - name: Zip assets
         run: |
           ./scripts/createZipFolders.sh ./dist ./out
@@ -30,4 +34,5 @@ jobs:
           tag: ${{ github.ref }}
           overwrite: true
           file_glob: true
-          prerelease: ${{ startsWith(github.event.release.tag_name, 'pre') }}
+          prerelease: ${{ contains(steps.latesttag.output.tag, 'alpha') || contains(steps.latesttag.output.tag, 'beta') }}
+          
