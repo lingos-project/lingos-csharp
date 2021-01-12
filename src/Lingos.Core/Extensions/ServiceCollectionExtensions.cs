@@ -38,30 +38,24 @@ namespace Lingos.Core.Extensions
         /// <returns></returns>
         private static IServiceCollection AddPluginServices(this IServiceCollection container, Assembly pluginAssembly)
         {
-            try
+            IPlugin plugin = PluginFactory.GetPlugin<IPlugin>(pluginAssembly);
+            PluginServices pluginServices = plugin.GetPluginServices();
+
+            foreach ((Type serviceType, Type implementationType) in pluginServices.ScopedServices)
             {
-                IPlugin plugin = PluginFactory.GetPlugin<IPlugin>(pluginAssembly);
-                PluginServices pluginServices = plugin.GetPluginServices();
-
-                foreach ((Type serviceType, Type implementationType) in pluginServices.ScopedServices)
-                {
-                    container.AddScoped(serviceType, implementationType);
-                }
-
-                foreach ((Type serviceType, Type implementationType) in pluginServices.TransientServices)
-                {
-                    container.AddTransient(serviceType, implementationType);
-                }
-
-                foreach ((Type serviceType, Type implementationType) in pluginServices.SingletonServices)
-                {
-                    container.AddSingleton(serviceType, implementationType);
-                }
+                container.AddScoped(serviceType, implementationType);
             }
-            catch (ApplicationException)
+
+            foreach ((Type serviceType, Type implementationType) in pluginServices.TransientServices)
             {
-                return container;
+                container.AddTransient(serviceType, implementationType);
             }
+
+            foreach ((Type serviceType, Type implementationType) in pluginServices.SingletonServices)
+            {
+                container.AddSingleton(serviceType, implementationType);
+            }
+            
             return container;
         }
     }

@@ -5,6 +5,9 @@ namespace Lingos.Source.Postgres
 {
     public class SourcePostgresPlugin : IPlugin
     {
+        public string Name => "Postgres Source";
+        public string CoreVersion => "";
+
         public PluginServices GetPluginServices()
         {
             return new()
