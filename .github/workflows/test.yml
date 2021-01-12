@@ -1,13 +1,12 @@
-name: Run test suite for dotnet
+name: Run test suite
 
 on:
   pull_request:
-    branches: [ main ]
+    branches: [ next, main ]
 
 jobs:
   test:
     runs-on: ubuntu-latest
-
     steps:
       - uses: actions/checkout@v2
       - name: Setup .NET

@@ -22,7 +22,7 @@ jobs:
           dotnet-version: 5.0.x
       - name: Publish assets for linux
         run: |
-          dotnet publish -c Release -r linux-x64 -p:PublishingDir=${{ github.workspace }}/dist -p:AssemblyVersion=${{ steps.previoustag.outputs.tag }}.0
+          dotnet publish -c Release -r linux-x64 -p:PublishingDir=${{ github.workspace }}/dist -p:Version=${{ steps.previoustag.outputs.tag }}
       - name: Zip assets
         run: |
           ./scripts/createZipFolders.sh ./dist ./out
